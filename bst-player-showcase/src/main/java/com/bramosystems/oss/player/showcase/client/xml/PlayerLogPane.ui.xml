@@ -1,0 +1,19 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field="x" type="com.bramosystems.oss.player.showcase.client.res.Bundle"/>
+    <ui:style>
+        .list {
+            overflow: auto;
+        }
+    </ui:style>
+    <g:HTMLPanel>
+        <div class='{x.css.controlPaneButtonPanel}'>
+            <g:Button ui:field='clearButton'>Clear Log</g:Button>
+        </div>
+        <g:FlowPanel styleName='{x.css.controlPaneList} {style.list}' ui:field='list' />
+    </g:HTMLPanel>
+</ui:UiBinder>

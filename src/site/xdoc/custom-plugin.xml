@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Wrap Custom Plugin</title>
+    </properties>
+    <head>
+        <meta name="description" content="Wrap custom media plugin with BST Player API" />
+    </head>
+    <body>
+        <section name="Wrap Custom Plugin">
+            <p>
+                There are far more media players used on the web than those currently supported by the API.
+                In situations where we need to use such players with GWT, BST Player 1.3 introduced a simple means of 
+                integration into the API framework.  The integration provides support for dynamic selection, UiBinder
+                and Javascript exportation out-of-the-box.
+            </p>
+            <p>
+                The next sections describe the steps to integrate custom plugin (and player) wrappers
+            </p>
+
+            <subsection name="Implement the player wrapper">
+                <p>The 
+                    <a href="bst-player-api/apidocs/com/bramosystems/oss/player/core/client/AbstractMediaPlayer.html">
+                        AbstractMediaPlayer
+                    </a> class provides the basic definition of media players in the API.
+            Based on Java's OOP model, simply extend the class and provide custom implementation as required to support the plugin.
+            Your implementation may have to interact with the plugin using 
+                    <a href='http://code.google.com/webtoolkit/doc/latest/DevGuideCodingBasicsJSNI.html'>JSNI</a> and/or 
+                    <a href='http://code.google.com/webtoolkit/doc/latest/DevGuideCodingBasicsOverlay.html'>Javascript Overlays</a>.
+                </p>
+                <p>
+                The 
+                    <a href="bst-player/bst-player-api/apidocs/com/bramosystems/oss/player/core/client/PlaylistSupport.html">
+                PlaylistSupport
+                    </a> interface could also be implemented to provide playlist support.  The code below is an
+                    illustrution wrapping a Flash player
+                </p>
+                <source>
+public class MyXPlayer extends AbstractMediaPlayer {
+
+    private MyXPlayerImpl impl;
+    private String playerId;
+    private Logger logger;
+    private PlayerWidget pw;
+
+    public MyXPlayer(String mediaURL, boolean autoplay, String height, String width)
+            throws LoadException, PluginNotFoundException {
+        PluginVersion req = ... &lt;the plugin version required for the player&gt;
+        PluginVersion v = PlayerUtil.getFlashPlayerVersion();
+        if (v.compareTo(req) &lt; 0) {
+            throw new PluginVersionException(req.toString(), v.toString());
+        }
+
+        playerId = DOM.createUniqueId();
+        
+        // create the players DOM object.
+        pw = new PlayerWidget("MyProvider", "MyXPlayer", playerId, mediaURL, autoplay);
+        pw.addParam("flashVars", "autoplay=" + autoplay);
+        pw.addParam("allowScriptAccess", "always");
+        
+        // add the widget to the GWT panel ...
+        FlowPanel panel = new FlowPanel();
+        panel.add(playerWidget);
+        initWidget(panel);
+
+        if ((width == null) || (height == null)) {
+            _height = "0px";    // null height &amp; width is used when
+            _width = "0px";     // wrapping with skins
+            isEmbedded = true;
+        } else {
+            _height = height;
+            _width = width;
+
+            logger = new Logger();  // log events
+            logger.setVisible(false);
+            panel.add(logger);
+
+            addDebugHandler(new DebugHandler() {
+
+                @Override
+                public void onDebug(DebugEvent event) {
+                    // show debug events in logger ...
+                    logger.log(event.getMessage(), false);
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onLoad() {
+        fireDebug("MyXPlayer");
+        playerWidget.setSize("100%", _height);
+        setWidth(_width);
+
+        impl = ... get JSNI implementation
+        firePlayerStateEvent(PlayerStateEvent.State.Ready);
+    }
+
+    @Override
+    public void loadMedia(String mediaURL) throws LoadException {
+       impl.load(mediaURL);
+    }
+
+    @Override
+    public void playMedia() throws PlayException {
+        impl.play();
+    }
+    ...    
+}</source>
+                <p>A 
+                    <a href="custom-player.html#Putting_it_together">custom control (skin) implementation</a> 
+                can also be used.  Developing skins this way automatically make them available through 
+                    <a href="ui-binder.html">UiBinder</a> and 
+                    <a href="javascript-support.html">Javascript</a>
+                </p>
+            </subsection>
+        
+            <subsection name="Implement the PlayerProviderFactory">
+                <p>The 
+                    <code>com.bramosystems.oss.player.core.client.spi.PlayerProviderFactory</code> interface defines
+            the methods required by player providers.  The implementation is consulted by the API when a new instance
+            of the wrapped player is required and also to determine the version of the required media plugin installed
+            on the player.
+                </p>
+                <p>The implementation is called via deffered binding, so browser specific implementations can also be used with 
+                GWT type-replacement
+                </p>
+                <p>The implementation should also be annotated with the 
+                    <code>@PlayerProvider</code> annotation. Multiple player widgets
+                may be handled by one PlayerProviderFactory implementation, so the annotation binds the players to the same namespace.
+                </p>
+                <p>The code below shows a sample implementation for MyXPlayer and 
+                    <code>
+                        <a href="custom-player.html#Putting_it_together">MyPlayer</a>
+                    </code> 
+                player widgets
+                </p>
+                
+                <source>
+@PlayerProvider("MyProvider")
+public class MyPlayerProvider implements PlayerProviderFactory {
+
+    @Override
+    public AbstractMediaPlayer getPlayer(String playerName, String mediaURL, 
+            boolean autoplay, String height, String width)
+            throws LoadException, PluginNotFoundException, PluginVersionException {
+        if(playerName.equals("MyPlayer")) {
+            return new MyPlayer(mediaURL, height, width);
+        } else if(playerName.equals("MyXPlayer")) {
+            return new MyXPlayer(mediaURL, autoplay, height, width);
+        } else {
+            throw new IllegalArgumentException("Unknown player - '" + playerName + "'");
+        }
+    }
+
+    @Override
+    public AbstractMediaPlayer getPlayer(String playerName, String mediaURL,
+            boolean autoplay) 
+            throws LoadException, PluginNotFoundException, PluginVersionException {
+        return getPlayer(playerName, mediaURL, autoplay, "50px", "100%");
+    }
+
+    @Override
+    public PluginVersion getDetectedPluginVersion(String playerName) 
+            throws PluginNotFoundException {
+       if(playerName.equals("MyXPlayer")) {
+            // return the version of the required plugin installed on the browser.
+            // Existing plugin detection methods can also be used if applicable.
+            return PlayerUtil.getFlashPlayerVersion();
+       }
+    }
+
+    @Override
+    public PlayerElement getPlayerElement(String playerName, String playerId, 
+            String mediaURL, boolean autoplay, HashMap&lt;String, String&gt; params) {
+        // this is only required if using the PlayerWidget helper class
+        if(playerName.equals('MyXPlayer')) {
+            PlayerElement e = new PlayerElement(PlayerElement.Type.EmbedElement,
+                playerId, "application/x-shockwave-flash");
+            e.addParam("src", "my-flash-player.swf");
+            e.addParam("name", playerId);
+
+            Iterator&lt;String&gt; keys = params.keySet().iterator();
+            while (keys.hasNext()) {
+                String name = keys.next();
+                e.addParam(name, params.get(name));
+            }
+            return e;
+        } else {
+            return null;
+        }
+    }
+}</source>
+            </subsection>
+            
+            <subsection name="Naming a provider">
+                <p>The value of the <code>@PlayerProvider</code> annotation specifies the name of the provider. The
+                name is intended for use in various files including Java source files, Javascript and UiBinder XML files.                
+                For predictable behaviour, it is encouraged that only alphanumeric characters be used as the value of this
+                annotation</p>
+                
+                <p>However, the value <em><code>"core"</code></em> is reserved for the provider of the core player widgets bundled
+                with the API.</p>
+            </subsection>
+            
+            <subsection name="Annotate the custom plugin/player wrapper">
+                <p>Place the 
+                    <code>@Player</code> annotation on the player widget.  The annotation is used during GWT
+                    compilation to link the player with the dynamic player selection mechanism of the API. 
+                </p>
+                <source>
+&lt;-- MyXPlayer.java --&gt;
+@Player(name="MyXPlayer", providerFactory=MyPlayerProvider.class, minPluginVersion="10.0.0")
+public class MyXPlayer extends AbstractMediaPlayer {
+
+&lt;-- MyPlayer.java --&gt;
+@Player(name="MyPlayer", providerFactory=MyPlayerProvider.class, minPluginVersion="1.0.0")
+public class MyPlayer extends CustomAudioPlayer {</source>
+                <p>The 
+                    <code>Player</code> annotation has the following required attributes:
+                </p>
+                <ul>
+                    <li>
+                        <code>name</code>: the canonical name of the player. It is also used to 
+                    associate mime-types with the player in the 
+                        <a href="dynamic-players.html">mime-types properties file</a>
+                    </li>
+                    <li>
+                        <code>providerFactory</code>: the PlayerProviderFactory implementation class
+                    </li>
+                    <li>
+                        <code>minPluginVersion</code>: the minimum version of the media plugin required by the player in the
+                format 
+                        <code>&lt;major&gt;.&lt;minor&gt;.&lt;revision&gt;</code>
+                    </li>
+                </ul>
+            </subsection>
+            
+            <subsection name="Associate mime-types with the player">
+                <p>The ability of selecting player widgets dynamically depends on the plugin/mime-types association.  The
+                association is specified in the 
+                    <a href="dynamic-players.html">mime-types properties file</a>.  Only player 
+                widgets listed in the file are considered in the dynamic player selection algorithm.
+                </p>
+                
+                <p>A plugin entry has the following format:</p>
+                <source>
+plugin.&lt;ProviderName&gt;.&lt;PlayerName&gt;    &lt;comma separated list of supported mime-types&gt;  
+or
+plugin.&lt;ProviderName&gt;.&lt;PlayerName&gt;.&lt;majorVersionNumber&gt;_&lt;minorVersionNumber&gt;_&lt;revisionNumber&gt;</source>
+
+                <p>Version numbers are required only when a set of mime-types are supported by a specific version of the plugin.  The version
+    numbers specify the lowest plugin version that supports the associated mime-types.
+                </p>
+                
+                <p>The <code>MyXPlayer</code> mime-types could be associated as:</p>
+                <source>
+plugin.MyProvider.MyXPlayer      audio/mpeg,video/flv,video/x-flv,video/mp4</source>
+                
+                <p>Similarly, supported streaming protocols are defined in the following format:</p>
+                <source>
+protocols.&lt;ProviderName&gt;.&lt;PlayerName&gt;    &lt;comma separated list of supported mime-types&gt;  
+or
+protocols.&lt;ProviderName&gt;.&lt;PlayerName&gt;.&lt;majorVersionNumber&gt;_&lt;minorVersionNumber&gt;_&lt;revisionNumber&gt;</source>
+
+                <p>Version numbers are required only when a set of protocols are supported by a specific version of the plugin.  The version
+    numbers specify the lowest plugin version that supports the associated protocols.
+                </p>
+                
+                <p>The <code>MyXPlayer</code> streaming protocols could be associated as:</p>
+                <source>
+protocols.MyProvider.MyXPlayer      mms</source>
+
+                <p>For backwards compatibility, the <code>core</code> provider is assumed for mime-types/protocols association without the 
+                <code>ProviderName</code> i.e. :
+                <source>
+plugin.PlayerName       =>      plugin.core.&lt;PlayerName&gt;
+protocols.PlayerName    =>      protocols.core.&lt;PlayerName&gt;</source>                
+                </p>
+            </subsection>
+
+            <subsection name="Using the player widgets">
+                <p>With the above steps, using the widgets is pretty straight forward.  You can either create directly:</p>
+                <source>
+AbstractMediaPlayer player = new MyPlayer("http://www.example.com/my-sound.mp3",
+         "50px", "100%");
+                </source>
+                <p>or through the 
+                    <code>PlayerUtil</code> factory:
+                </p>
+                <source>
+PlayerInfo pi = PlayerUtil.getPlayerInfo("MyProvider", "MyXPlayer");
+AbstractMediaPlayer player = PlayerUtil.getPlayer(pi, "http://www.example.com/my-sound.mp3",
+        false, "50px", "100%");
+                </source>
+                <p>or in UiBinder XML:</p>
+                <source>
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client'&gt;
+        ...
+        
+        &lt;player:Player name="MyProvider:MyXPlayer" autoplay='true' height='250px' width='100%'
+            mediaURL='http://www.example.com/my-video.mp4' /&gt;
+            
+        ...    
+        
+        &lt;player:Player name="MyProvider:MyPlayer" autoplay='true' height='50px' width='100%'
+            mediaURL='http://www.example.com/my-sound.mp3' /&gt;
+            
+        ...    
+&lt;/ui:UiBinder&gt;
+                </source> 
+                <p>And if using with 
+                    <a href='javascript-support.html'>Javascript</a>:
+                </p>
+                <source>
+&lt;script type="text/javascript"&gt;
+  var onBSTPlayerReady = function() {
+      player = new bstplayer.Player("MyProvider:MyXPlayer",
+            "http://www.example.com/my-sound.mp3", false, "100%", "50px", null);
+      player.inject('my-player');
+  }
+&lt;/script&gt;
+                </source>            
+            </subsection>
+        </section>
+    </body>
+</document>

@@ -1,0 +1,135 @@
+@external gwt-TabBar, gwt-TabBarItem, gwt-TabBarItem-selected, gwt-TabPanelBottom, gwt-Button;
+
+body {
+    padding: 0px 0px 160px 0px;
+}
+code {
+    font-size: 120%;
+}
+.gwt-Button {
+    border: 1px solid #cccccc;
+    background-color: #e7e7e7;
+    cursor: pointer;
+}
+.gwt-Button:hover {
+    background-color: #d7d7d7;
+}
+.gwt-TabBar {
+    background-color: #4b4b93;
+    padding-top: 2px;
+}
+.gwt-TabBar .gwt-TabBarItem {
+    padding: 2px 5px;
+    color: white;
+    font-weight: bold;
+    border-right: 1px white solid;
+    cursor: pointer;
+}
+.gwt-TabBar .gwt-TabBarItem-selected {
+    background-color: white;
+    -moz-border-radius: 5px 5px 0px 0px;
+    color: black;
+}
+
+@sprite .yes {
+    gwt-image: 'tick';
+}
+@sprite .no {
+    gwt-image: 'cross';
+}
+@sprite .error {
+    gwt-image: 'error';
+}
+@sprite .playlistItem {
+    gwt-image: 'music';
+}
+
+.yes, .no, .error {
+    padding-left: 20px;
+    background-position: left top;
+    height: auto;
+}
+
+.disabledPlugin {
+    background-color: #ddd;
+    cursor: default;
+}
+
+.playlistItem {
+    background-position: left center;
+    width: auto;
+    height: auto;
+    padding-left: 15px;
+    margin: 5px 0px 0px 5px;
+}
+
+.navItem {
+    padding: 5px;
+    padding-left: 7px;
+    border-left: 3px solid transparent;
+}
+.navItem:hover {
+    color: #ffffff;
+    background-color: #efefef;
+}
+.navItem a {
+    text-decoration: none;
+}
+.navItemSelected, .navItemSelected:hover {
+    border-left-color: #4b4b93;
+    background-color: #dadaee;
+}
+.pct20, .yes, .no, .error {
+    width: 20%;
+    float: left;
+}
+.pct60 {
+    width: 55%;
+    float: left;
+    padding-left: 5px;
+}
+.pct30 {
+    width: 30%;
+    float: left;
+}
+.pct40 {
+    width: 35%;
+    float: left;
+}
+.clear {
+    clear: both;
+}
+.spacedPanel {
+    margin-bottom: 0.5em;
+    padding: 2px;
+}
+.headerRow {
+    background-color: #8f8fbb;
+    font-weight: bold;
+    color: white;
+    padding: 4px;
+    text-align: center;
+}
+.evenRow {
+}
+.oddRow {
+    background-color: #f5f5f5;
+}
+
+
+.pluginOption {
+    width: 25%;
+    display:inline-block;
+}
+.controlPaneList {
+    width: 100%;
+    height: 100px;
+}
+.controlPaneButtonPanel {
+    text-align: right;
+    padding: 2px 5px;
+    border-bottom: 1px solid #cccccc;
+}
+.capsule {
+    padding: 6em 0px;
+}

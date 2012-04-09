@@ -1,0 +1,37 @@
+<!--
+    Document   : index
+    Created on : Jan 29, 2009, 10:22:05 PM
+    Author     : Sikirulai Braheem <sbraheem at gmail.com>
+-->
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="description" content="BST Player Demo application using
+              regular GWT code." />
+
+        <title>BST Player Issues - Many YouTube(tm) Embedded</title>
+        <link href="styles.css" type="text/css" rel="stylesheet" />
+    </head>
+    <body>
+        <object style="width: 100%; height: 50px;" 
+                type="application/x-mplayer2" id="gwtuid1" height="50px" width="100%">
+            <param value="0" name="autostart">
+            <param value="http://localhost:8080/bst-player-showcase/media/o-na-som.mp3" name="SRC">
+            <param value="1" name="enabled">
+        </object>
+        
+        <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost +
+                "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+            try {
+                var pageTracker = _gat._getTracker("UA-7535603-3");
+                pageTracker._trackPageview();
+            } catch(err) {}
+        </script>
+    </body>
+</html>

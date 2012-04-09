@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<actions>
+    <action>
+        <actionName>CUSTOM-dev mode</actionName>
+        <displayName>dev mode</displayName>
+        <goals>
+            <goal>clean</goal>
+            <goal>gwt:run</goal>
+        </goals>
+        <activatedProfiles>
+            <activatedProfile>dev-mode</activatedProfile>
+        </activatedProfiles>
+    </action>
+</actions>

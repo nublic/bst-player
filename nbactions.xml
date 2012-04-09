@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-site</actionName>
+        <displayName>site</displayName>
+        <recursive>false</recursive>
+        <goals>
+            <goal>clean:clean</goal>
+            <goal>site:site</goal>
+        </goals>
+        <activatedProfiles>
+            <activatedProfile>oss-lab-site</activatedProfile>
+        </activatedProfiles>
+    </action>
+    <action>
+        <actionName>CUSTOM-site-2</actionName>
+        <displayName>site local</displayName>
+        <recursive>false</recursive>
+        <goals>
+            <goal>clean:clean</goal>
+            <goal>site:site</goal>
+        </goals>
+        <activatedProfiles>
+            <activatedProfile>dev-mode</activatedProfile>
+            <activatedProfile>m3-build</activatedProfile>
+            <activatedProfile>oss-lab-site-m3</activatedProfile>
+        </activatedProfiles>
+    </action>
+    <action>
+            <actionName>CUSTOM-snapshot-deploy</actionName>
+            <displayName>snapshot-deploy</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>deploy</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>dev-mode</activatedProfile>
+                <activatedProfile>m3-build</activatedProfile>
+            </activatedProfiles>
+        </action>
+    <action>
+            <actionName>CUSTOM-release</actionName>
+            <displayName>release</displayName>
+            <goals>
+                <goal>release:prepare</goal>
+                <goal>release:perform</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>dev-mode</activatedProfile>
+                <activatedProfile>oss-lab-site-m3</activatedProfile>
+                <activatedProfile>m3-build</activatedProfile>
+            </activatedProfiles>
+        </action>
+</actions>

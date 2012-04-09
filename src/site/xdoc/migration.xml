@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Migration Guide</title>
+    </properties>
+    
+    <head>
+        <meta name="description" content="Migrate from previous BST Player releases in simple steps" />
+    </head>
+    <body>
+        <section name="Migrating to version 1.3">
+            <p>
+                Version 1.3 introduced many enhancements to the API and is backwards compatible.
+            </p>
+
+            <subsection name="GWT 2.2 dependency">
+                <p>
+                    The library now depends on GWT 2.2 or later.
+                </p>
+            </subsection>
+        </section>
+
+        <section name="Migrating to version 1.2">
+            <p>
+                Version 1.2 introduce many enhancements that may affect existing code.  The
+                effect may not be much but it is worth taking note of.
+            </p>
+
+            <subsection name="GWT 2.x dependency">
+                <p>
+                    The library now requires GWT 2.0 or later.  GWT has come a long way since version 1.6 so
+                    this may not be an issue, as most GWT projects are based on 2.x already.
+                </p>
+            </subsection>
+
+            <subsection name="WinMediaPlayer and non-IE browsers">
+                <p>
+                    <code>WinMediaPlayer</code> widget now requires the Windows Media Player plugin for
+                    Firefox in non-IE browsers to guarantee programmable control.  Since this may not
+                    always be required, two operating modes are defined - the embed-only and
+                    programmable modes.
+                </p>
+                <p>
+                    In embed-only mode, the widget is expected to be used for rendering only without
+                    any programmatic control.  Consequently method calls on the widget in this mode
+                    may fail and such errors/failures are suppressed.
+                </p>
+                <p>
+                    In programmable mode - the default, the widget throws <code>PluginNotFoundException</code>
+                    in non-IE browsers without the Windows Media Player plugin for Firefox.
+                </p>
+            </subsection>
+
+        </section>
+
+        <section name="Migrating from version 0.6">
+            <p>
+                The following improvements on version 0.6 may require minor tweaks to existing code.
+                Such changes however, should only take a few minutes to rectify.
+            </p>
+
+            <subsection name="Code Refactoring">
+                <p>
+                    The library is now split into different modules consisting of:
+                </p>
+                    
+                <ul>
+                    <li>
+                        <b>com.bramosystems.oss.player.core.Core</b> -
+                        The core classes of the API (including the base player widgets)
+                    </li>
+                    <li>
+                        <b>com.bramosystems.oss.player.core.event.Event</b> -
+                        The new event classes (inherited by the Core module)
+                    </li>
+                    <li>
+                        <b>com.bramosystems.oss.player.capsule.Capsule</b> -
+                        The sample custom sound player (inherits the Core module)
+                    </li>
+                    <li>
+                        <b>com.bramosystems.oss.player.flat.FlatVideoPlayer</b> -
+                        The sample custom video player (inherits the Core module)
+                    </li>
+                </ul>
+                    
+                <p>
+                    Consequently, existing codes that inherits the
+                    <code>com.bramosystems.gwt.player.BSTPlayer</code> module will now need to inherit:
+                </p>
+                <p>
+                    <code>com.bramosystems.oss.player.core.Core</code> - if using only the base player
+                    widgets (such as WinMediaPlayer, QuickTimePlayer etc)
+                </p>
+                <p>
+                    <code>com.bramosystems.oss.player.capsule.Capsule</code> - if using the sample
+                    custom sound player
+                </p>
+                <p>
+                    <code>com.bramosystems.oss.player.flat.FlatVideoPlayer</code> - if using the sample
+                    custom video player
+                </p>
+            </subsection>
+
+            <subsection name="New Event Handlers">
+                <p>
+                    GWT 1.6 introduced a new EventHandler system which makes the development of complex,
+                    decoupled applications easier. Inline with this, the <code>MediaStateListener</code>
+                    class has been replaced with the following handlers in the
+                    <code>com.bramosystems.oss.player.core.event.client</code> package:
+                </p>
+
+                <table>
+                    <tr>
+                        <td>PlayerStateHandler</td>
+                        <td>handles events that are fired when the state of the player changes</td>
+                    </tr>
+                    <tr>
+                        <td>PlayStateHandler</td>
+                        <td>handles events that are fired when the state of media playback changes</td>
+                    </tr>
+                    <tr>
+                        <td>MediaInfoHandler</td>
+                        <td>handles MediaInfoEvent fired whenever media metadata is available</td>
+                    </tr>
+                    <tr>
+                        <td>LoadingProgressHandler</td>
+                        <td>handles events that are fired when the progress of a loading media changes</td>
+                    </tr>
+                    <tr>
+                        <td>DebugHandler</td>
+                        <td>handles events that are fired when info/error level messages are generated by the embedded plugin</td>
+                    </tr>
+                </table>
+
+                <p>
+                    Also, <code>VolumeChangeListener</code> used for volume control is replaced with
+                    <code>VolumeChangeHandler</code>, while <code>SeekChangeListener</code> used for
+                    seek controls is replaced with <code>SeekChangeHandler</code>.
+                </p>
+                <p>
+                    Existing codes that use:
+                </p>
+
+
+                <source>
+player.addMediaStateListener{ new MediaStateListener() {
+...
+}};</source>
+                
+                <p>
+                    will now need to do:
+                </p>
+
+                <source>
+player.addPlayerStateHandler { new PlayerStateHandler() {
+    // if interested in player state changes
+}};
+player.addPlayStateHandler { new PlayStateHandler() {
+    // if interested in play state changes
+}};
+
+etc...     </source>
+
+                <p>
+                    Please check the
+                    <a href="bst-player-api/apidocs/index.html">API</a> for details.
+                </p>
+            </subsection>
+
+            <subsection name="New FlashMediaPlayer">
+                The <code>FlashMP3Player</code> and <code>FlashVideoPlayer</code> widgets has been removed
+                in favour of <code>FlashMediaPlayer</code> widget.  The new widget is designed to handle
+                all media types supported by the Adobe Flash player including MP3 sound, FLV video
+                and MP4 sound/video.
+            </subsection>
+
+            <subsection name="New CustomPlayerControl widget">
+                The <code>FlatCustomControl</code> widget has been replaced with the new
+                <code>CustomPlayerControl</code> widget. The widget provides a simple player UI
+                with play/pause/stop buttons as well as a seekbar to control the supported media plugins.
+            </subsection>
+        </section>
+    </body>
+</document>

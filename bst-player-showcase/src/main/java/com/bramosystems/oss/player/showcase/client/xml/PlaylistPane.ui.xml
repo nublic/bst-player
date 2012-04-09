@@ -1,0 +1,15 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field="x" type="com.bramosystems.oss.player.showcase.client.res.Bundle"/>
+    <g:HTMLPanel>
+        <div class='{x.css.controlPaneButtonPanel}'>
+            <g:Button ui:field='delButton' enabled='false'>Remove selected</g:Button>
+            <g:Button ui:field='addButton'>Add to list</g:Button>
+        </div>
+        <g:ListBox styleName='{x.css.controlPaneList}' ui:field='list' multipleSelect='false' visibleItemCount='5' />
+    </g:HTMLPanel>
+</ui:UiBinder>

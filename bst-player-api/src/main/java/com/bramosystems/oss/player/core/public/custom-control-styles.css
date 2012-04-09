@@ -1,0 +1,42 @@
+/*
+* Copyright 2009 Sikirulai Braheem <sbraheem at bramosystems.com>
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+* License for the specific language governing permissions and limitations under
+* the License.
+*
+*
+*   Document   : custom-control-styles
+*   Created on : May 22, 2009, 7:45:46 AM
+*/
+
+.player-CustomPlayerControl {
+    font: bold 8pt Arial,Helvetica,sans-serif;
+    color:  white;
+    background: url(flat-bg.png) repeat;
+}
+.player-CustomPlayerControl-seekbar .loading, .player-CustomPlayerControl-volumeControl .track  {
+    cursor: pointer;
+    background: #ffff99;
+}
+.player-CustomPlayerControl-seekbar .playing, .player-CustomPlayerControl-volumeControl .volume {
+    cursor: pointer;
+    background: red;
+}
+.player-CustomPlayerControl-seekbar {
+    vertical-align:middle;
+    background: #dadada;
+}
+
+.player-CustomPlayerControl-volumeControl {
+    background: url(flat-bg.png) repeat;
+    padding: 2px;
+}

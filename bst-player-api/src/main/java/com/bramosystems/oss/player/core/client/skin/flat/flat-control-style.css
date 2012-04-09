@@ -1,0 +1,52 @@
+@sprite .play{
+    gwt-image: "play";
+}
+@sprite .play:hover {
+    gwt-image: "playHover";
+}
+@sprite .playDisabled{
+    gwt-image: 'playDisabled';
+}
+
+@sprite .pause{
+    gwt-image: 'pause';
+}
+@sprite .pause:hover{
+    gwt-image: 'pauseHover';
+}
+
+@sprite .stop{
+    gwt-image: 'stop';
+}
+@sprite .stopDisabled{
+    gwt-image: 'stopDisabled';
+}
+
+@sprite .next{
+    gwt-image: 'next';
+}
+@sprite .next:hover {
+    gwt-image: 'nextHover';
+}
+@sprite .nextDisabled {
+    gwt-image: 'nextDisabled';
+}
+
+@sprite .prev {
+    gwt-image: 'prev';
+}
+@sprite .prev:hover {
+    gwt-image: 'prevHover';
+}
+@sprite .prevDisabled {
+    gwt-image: 'prevDisabled';
+}
+
+@sprite .volume{
+    gwt-image: 'volume';
+}
+
+.play, .pause, .stop, .next, .prev, .volume {
+    cursor: pointer;
+    border: none;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="${project.name}" xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+    <version position="left" />
+    <body>
+        <menu name="${project.name}">
+            <item name="Overview" href="index.html" />
+            <item name="Getting Started" href="getting-started.html" />
+            <item name="Event Handling" href="events.html" />
+            <item name="Release Notes" href="release-note.html" />
+            <item name="UiBinder Support" href="ui-binder.html" />
+            <item name="JSON/XML Playlists" href="playlists.html" />
+            <item name="Javascript Support" href="javascript-support.html" />
+            <item name="Migration Guide" href="migration.html" />
+            <item name="Download" href="http://code.google.com/p/bst-player/downloads/list" />
+            <item name="Forum" href="http://groups.google.com/group/bst-player" />
+            <item name="Issues" href="http://code.google.com/p/bst-player/issues/" />
+            <item name="Building from source" href="build-from-source.html" />
+        </menu>
+        <menu name="Custom Players">
+            <item name="Custom Player Controls" href="custom-player.html" />
+            <item name="Export to Javascript" href="script-exporter.html" />
+            <item name="Dynamic Players" href="dynamic-players.html" />
+        </menu>
+        <menu name="Demo Application">
+            <item name="BST Player Showcase" href="demo/showcase/index.html" />
+        </menu>
+        <menu ref="modules" />
+        <menu ref="reports" />
+    </body>
+    <poweredBy>
+        <logo name="Maven" href="http://maven.apache.org/" 
+        img="http://oss.bramosystems.com/bst-player/images/logos/build-by-maven-white.png" />
+    </poweredBy>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-default-skin</artifactId>
+        <version>1.0</version>
+    </skin>
+</project>

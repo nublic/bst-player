@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Build from source</title>
+    </properties>
+    <head>
+        <meta name="description" content="Build the API from source" />
+    </head>
+    <body>
+        <section name="Building from source">
+
+            <p>
+                To build the project from source, you need:
+                <ul>
+                    <li><a href='http://java.sun.com'>JDK</a> 1.6 or higher</li>
+                    <li><a href='http://maven.apache.org'>Apache Maven</a> 2.0 or higher</li>
+                    <li>The source files</li>
+                </ul>
+            </p>
+
+            <subsection name="The source files">
+                <p>The project is split into modules:
+                    <ul>
+                        <li><a href='bst-flash-player/'>BST Flash Player</a>: implements the media player
+                        for Flash media.</li>
+                        <li><a href='bst-player-api/'>BST Player API</a>: implements the main API.</li>
+                        <li><a href='bst-player-js/'>BST Player JS Library</a>: exports the core player
+                        widgets as Javascript object.</li>
+                        <li><a href='bst-player-showcase/'>BST Player Showcase</a>: implements the showcase
+                        application showing the various features of the API.</li>
+                    </ul>
+                </p>
+                
+                <p><a href='source-repository.html'>Get the source</a> for the module(s) of
+                        interest</p>
+            </subsection>
+
+             <subsection name="Run the build">
+                <p>With all requirements met, run the Maven <code>install</code> command with
+                the <code>dev-mode</code> profile active.  This is as simple as:
+                </p>
+                <source>
+mvn -Pdev-mode clean install</source>
+            </subsection>
+        </section>
+    </body>
+</document>

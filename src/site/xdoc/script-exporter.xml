@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Export your own players</title>
+    </properties>
+    <head>
+        <meta name="description" content="Create custom players and export as Javascript objects" />
+    </head>
+    <body>
+        <section name="Export your custom player widgets">
+
+            <p>
+                After creating <a href='custom-player.html'>custom player controls</a>,
+                it may be desirable to take advantage of <a href='code.google.com/webtookit'>GWT</a>s'
+                edge and use the widgets in non-GWT applications.
+            </p>
+
+            <p>The following sections describe how to export player widgets as Javascript objects.</p>
+
+            <subsection name="The required module">
+                <p>
+                For this description to work, your application should inherit the
+                    <i>com.bramosystems.oss.player.script.Script</i> module.  This is as simple as
+                putting the following line in your module XML file:
+                </p>
+                <source>
+&lt;inherits name="com.bramosystems.oss.player.script.Script"/&gt;</source>
+
+                <p>The module contains the classes that define the contract
+                between the <a href='bst-player-api/apidocs/com/bramosystems/oss/player/script/client/ExportUtil.html'>
+                        <code>ExportUtil</code></a> utility class and the player widgets provider.</p>
+            </subsection>
+
+            <subsection name="Implement the player widget provider">
+                <p>
+                    The <code>ExportProvider</code> interface define methods to get the required widgets
+                    during the 'export to Javascript' process.
+                </p>
+
+                <p>
+                    With the introduction of the provider framework in BST Player 1.3, the <code>ExportProvider</code> 
+                    interface is deprecated in favour of the <code>AbstractExportProvider</code> class.  The <code>AbstractExportProvider</code>
+                    class provides means of exporting all player widgets registered with the API including 3rd parties.
+                </p>
+
+                <p>
+                    The following snippet implements the <code>ExportProvider</code> interface.
+                </p>
+                
+                <source>
+public class MyProvider implements ExportProvider {
+
+    @Override
+    public AbstractMediaPlayer getPlayer(Plugin plugin, String mediaURL,
+            boolean autoplay, String width,
+            String height, HashMap&lt;String, String&gt; options)
+            throws LoadException, PluginNotFoundException, PluginVersionException {
+        // return an AbstractMediaPlayer implementation using the
+        // specified parameters.  Here, we are using the
+        // <a href='custom-player.html#Putting_it_together'>custom player</a> defined earlier
+        return new MyPlayer(mediaURL, height, width);
+    }
+
+    @Override
+    public Widget getMissingPluginWidget() {
+        // if the <code>getPlayer</code> method throws a missing plugin exception,
+        // this method is called to get the widget to use instead
+        return PlayerUtil.getMissingPluginNotice(plugin);
+    }
+
+    @Override
+    public Widget getMissingPluginVersionWidget() {
+        // if the <code>getPlayer</code> method throws a missing plugin version
+        // exception, this method is called to get the widget to use instead
+        return PlayerUtil.getMissingPluginNotice(plugin);
+    }
+
+    @Override
+    public MediaSeekBar getSeekBar(int height, HashMap&lt;String, String&gt; options) {
+        // this method is called to get a seek bar implementation
+        return new CSSSeekBar(height);
+    }
+}</source>
+
+                <p>
+                    The following example shows the <code>AbstractExportProvider</code> implementation.
+                </p>
+
+                <source>
+public class MyProvider2 extends AbstractExportProvider {
+
+    @Override
+    public AbstractMediaPlayer getPlayer(String playerProvider, String playerName,
+            String mediaURL, boolean autoplay, String width,
+            String height, HashMap&lt;String, String&gt; options)
+            throws LoadException, PluginNotFoundException, PluginVersionException {
+        // return an AbstractMediaPlayer implementation using the
+        // specified parameters.  Here, we are using the
+        // <a href='custom-player.html#Putting_it_together'>custom player</a> defined earlier
+        return new MyPlayer(mediaURL, height, width);
+    }
+
+    @Override
+    public Widget getMissingPluginWidget() {
+        // if the <code>getPlayer</code> method throws a missing plugin exception,
+        // this method is called to get the widget to use instead
+        return PlayerUtil.getMissingPluginNotice(plugin);
+    }
+
+    @Override
+    public Widget getMissingPluginVersionWidget() {
+        // if the <code>getPlayer</code> method throws a missing plugin version
+        // exception, this method is called to get the widget to use instead
+        return PlayerUtil.getMissingPluginNotice(plugin);
+    }
+
+    @Override
+    public MediaSeekBar getSeekBar(int height, HashMap&lt;String, String&gt; options) {
+        // this method is called to get a seek bar implementation
+        return new CSSSeekBar(height);
+    }
+}</source>
+            </subsection>
+
+            <subsection name="Export the widgets">
+                <p>
+                    The <code>ExportUtil</code> class performs the actual job of exporting these
+                    widgets with three static methods.
+                </p>
+                <p>- <code>ExportUtil.exportPlayer()</code>: binds the player widget as a
+                    <code>bstplayer.Player</code> Javascript object.
+                </p>
+                <p>- <code>ExportUtil.exportSeekBar()</code>: binds the seekbar widget as a
+                    <code>bstplayer.Seekbar</code> Javascript object.
+                </p>
+                <p>- <code>ExportUtil.signalAPIReady()</code>: calls the <code>onBSTPlayerReady()</code>
+                callback function on the host page.  Obviously, this method is called only after the
+                player and/or seekbar widgets have been exported to the host page.
+                </p>
+                <p>A sample export implementation:
+                </p>
+
+                <source>
+public class MyExporter implements EntryPoint {
+    public MyExporter() {
+        ExportUtil.exportPlayer(); // export the player
+        ExportUtil.exportSeekBar(); // export the seekbar
+    }
+
+    @Override
+    public void onModuleLoad() {
+        ExportUtil.signalAPIReady(); // tell the host page we're good to go
+    }
+}</source>
+
+                <p>
+                    But for the <code>ExportUtil</code> to succeed, it needs to know the widget provider
+                    implementation.  This is achieved using GWTs' type-replacement feature.
+                </p>
+
+                <p>
+                    If using the <code>ExportProvider</code> interface, the following line should be in your module XML file:
+                </p>
+
+                <source>
+&lt;replace-with class="com.example.foo.MyProvider"&gt;
+  &lt;when-type-is class="com.bramosystems.oss.player.script.client.ExportProvider"/&gt;
+&lt;/replace-with&gt;
+</source>
+
+                <p>
+                    But if using the <code>AbstractExportProvider</code> implementation, the required configuration
+                    is slightly different:
+                </p>
+
+                <source>
+&lt;!-- Enable the provider framework for scripts.              --&gt;
+&lt;!-- It is disabled by default for backwards compatibility.  --&gt;
+&lt;set-property name="bstplayer.script.useProviderFramework" value="true"/&gt;
+
+&lt;replace-with class="com.example.foo.MyProvider2"&gt;
+  &lt;when-type-is class="com.bramosystems.oss.player.script.client.AbstractExportProvider"/&gt;
+&lt;/replace-with&gt;
+</source>
+            </subsection>
+
+            <subsection name="Using the widgets">
+                <p>
+                    How to use the widget as Javascript objects is fully described
+                    <a href='javascript-support.html'>here</a>.  Obviously your application
+                    replaces the <a href='javascript-support.html'>BST Player JS</a> library.
+                </p>
+            </subsection>
+        </section>
+
+    </body>
+</document>

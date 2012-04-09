@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright 2009 Sikirulai Braheem
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+-->
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx"
+        applicationComplete="initApp()" backgroundAlpha="0.0" backgroundColor="0x000000">
+
+    <fx:Script>
+        <![CDATA[
+            import com.bramosystems.oss.player.*;
+            import com.bramosystems.oss.player.control.*;
+            import com.bramosystems.oss.player.external.*;
+            import com.bramosystems.oss.player.events.*;
+            import com.bramosystems.oss.player.playlist.*;
+
+            import flash.external.*;
+            import flash.events.*;
+            import flash.display.*;
+            import flash.geom.*;
+            import mx.core.FlexGlobals;
+            import mx.events.*;
+
+            private var debug:Boolean = true;
+            private var controller:Controller;
+            private var player:Player;
+
+            private function initApp():void {
+                try {
+                    var setting:Setting = new Setting();
+                    var playlist:Playlist = new Playlist(setting);
+
+                    // init player ...
+                    player = new Player(setting, playlist);
+                    addEventListener(ResizeEvent.RESIZE, player.resizeDoVDUSize);
+
+                    // init controller ...
+                    controller = new Controller(player, setting, playlist);
+                    EventUtil.controller = controller;
+
+                    addElement(player);
+                    addElement(controller);
+
+                    /********************** ADD EVENT LISTENERS ************************/
+                    addEventListener(MouseEvent.MOUSE_DOWN, EventUtil.fireMouseDownEvent);
+                    addEventListener(MouseEvent.MOUSE_UP, EventUtil.fireMouseUpEvent);
+                    addEventListener(MouseEvent.MOUSE_MOVE, EventUtil.fireMouseMoveEvent);
+                    addEventListener(MouseEvent.MOUSE_MOVE, controller.onAHMouseMove);
+                    addEventListener(MouseEvent.CLICK, EventUtil.fireClickEvent);
+                    addEventListener(MouseEvent.DOUBLE_CLICK, EventUtil.fireDoubleClickEvent);
+                    FlexGlobals.topLevelApplication.addEventListener(KeyboardEvent.KEY_UP, EventUtil.fireKeyUpEvent);
+                    FlexGlobals.topLevelApplication.addEventListener(KeyboardEvent.KEY_DOWN, EventUtil.fireKeyDownEvent);
+
+                    /********************** SETUP JS-INTERFACE FUNCTIONS ************************/
+                    attachJSInterface(setting, playlist);
+
+                    /******************* FINISH INIT ***********************************/
+                    contextMenu = new PlayerInfo().getMenu();
+                    Log.info(PlayerInfo.getPlayerInfo());
+                    Log.info("Flash Plugin Version " + getFlashVersion());
+                    Log.debug("Security Zone : " + Security.sandboxType);
+                    playlist.add(PlayerOptions.mediaURL);
+                    EventUtil.fireApplicationInitialized();
+
+                    player.loadNext();
+                    if (PlayerOptions.autoplay) {
+                        player.play();
+                    }
+                } catch(err:SecurityError) {
+                    Log.error(err.message);
+                } catch(err:Error) {
+                    Log.error(err.message);
+                }
+            }
+
+            private function attachJSInterface(setting:Setting, playlist:Playlist):void {
+                // Check if the container is able to use the external API.
+                try {
+                    if (ExternalInterface.available) {          // setup callback interfaces...
+                        ExternalInterface.addCallback("getPlayerVersion", PlayerInfo.getPlayerVersion);
+                        ExternalInterface.addCallback("getPluginVersion", getFlashVersion);
+                        ExternalInterface.addCallback("close", player.close);
+                        ExternalInterface.addCallback("getVideoHeight", player.getVideoHeight);
+                        ExternalInterface.addCallback("getVideoWidth", player.getVideoWidth);
+
+                        // settings stuffs ...
+                        ExternalInterface.addCallback("getVolume", setting.getVolume);
+                        ExternalInterface.addCallback("setVolume", setting.setVolume);
+                        ExternalInterface.addCallback("getLoopCount", setting.getLoopCount);
+                        ExternalInterface.addCallback("setLoopCount", setting.setLoopCount);
+                        ExternalInterface.addCallback("isShuffleEnabled", setting.isShuffleEnabled);
+                        ExternalInterface.addCallback("setShuffleEnabled", setting.setShuffleEnabled);
+
+                        // playlist stuffs ...
+                        ExternalInterface.addCallback("getPlaylistSize", playlist.size);
+                        ExternalInterface.addCallback("clearPlaylist", playlist.clear);
+                        ExternalInterface.addCallback("removeFromPlaylist", playlist.remove);
+                        ExternalInterface.addCallback("addToPlaylist", playlist.add);
+                        // repeat mode support ... [since 1.2]
+                        ExternalInterface.addCallback("setRepeatMode", playlist.setRepeatMode);
+                        ExternalInterface.addCallback("getRepeatMode", playlist.getRepeat);
+
+                        // play control stuffs...
+                        ExternalInterface.addCallback("load", player.load);
+                        ExternalInterface.addCallback("play", player.play);
+                        ExternalInterface.addCallback("playNext", player.playNext);
+                        ExternalInterface.addCallback("playPrev", player.playPrev);
+                        ExternalInterface.addCallback("playIndex", player.playIndex);
+                        ExternalInterface.addCallback("stop", player.stop);
+                        ExternalInterface.addCallback("getDuration", player.getDuration);
+                        ExternalInterface.addCallback("getPlayPosition", player.getPlayPosition);
+                        ExternalInterface.addCallback("setPlayPosition", player.setPlayPosition);
+
+                        // matrix stuffs ... [since 1.1]
+                        ExternalInterface.addCallback("getMatrix", player.getMatrix);
+                        ExternalInterface.addCallback("setMatrix", player.setMatrix);
+
+                        // fullscreen support ... [since 1.2]
+    //                        ExternalInterface.addCallback("toggleFullScreen", controller.toggleScreen);
+    //                        ExternalInterface.addCallback("isFullScreen", controller.isFullScreenState);
+                        ExternalInterface.addCallback("isControllerVisible", controller.isControllerVisible);
+                        ExternalInterface.addCallback("setControllerVisible", controller.setControllerVisible);
+                        ExternalInterface.addCallback("setAutoHideController", controller.setAutoHide);
+                        ExternalInterface.addCallback("isAutoHideController", controller.isAutoHide);
+                    } else {
+                        trace("External interface is not available for this container.");
+                    }
+                } catch(err:SecurityError) {
+                } catch(err:Error) {
+                }
+            }
+
+            public function getFlashVersion():String {
+                var vers:String = flash.system.Capabilities.version;
+                vers = vers.substring(4);
+                var v:Array = vers.split(",");
+                vers = v[0];
+                for(var i:int = 1; i < v.length; i++) {
+                    vers += "." + v[i];
+                }
+                return vers;
+            }
+        ]]>
+    </fx:Script>
+</s:Application>

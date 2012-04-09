@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Getting Started</title>
+    </properties>
+    <head>
+        <meta name="description" content="Get started adding sound and video to GWT
+        applications using with your favourite plugins." />
+    </head>
+    <body>
+        <div style="background-color:#ffffcc;border:1px solid red;margin: 5px 3em;padding:0.8em">
+            The information in this document applies to version 1.0 and later. Check
+            <a href="http://code.google.com/p/bst-player/wiki/GettingStarted">here</a> for
+            previous versions.
+        </div>
+        <p>
+            <macro name="toc">
+                <param name="section" value="0"/>
+            </macro>
+        </p>
+        <section name="Getting Started">
+            <p>
+                Before getting started, download the library and add it to your application classpath.
+                You can download the library on the projects download page on
+                <a href="http://code.google.com/p/bst-player/downloads/list">Google Code</a>.
+            </p>
+            <p>
+                If you are developing with Maven, you can add the library to your projects'
+                dependencies:
+            </p>
+            <source>
+&lt;dependency&gt;
+    &lt;groupId&gt;com.bramosystems.oss.player&lt;/groupId&gt;
+    &lt;artifactId&gt;bst-player-api&lt;/artifactId&gt;
+    &lt;version&gt;${appropriate-version}&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;</source>
+            <p>
+                However, you will need to add the
+                <a href="http://downloads.bramosystems.com/maven2">
+                Bramosystems Maven Repository </a> definition to your POM as shown below:
+            </p>
+            <source>
+&lt;repositories&gt;
+    . . .
+    &lt;repository&gt;
+        &lt;id&gt;bramosystems-releases&lt;/id&gt;
+        &lt;name&gt;Bramosystems Release Repository&lt;/name&gt;
+        &lt;url&gt;http://downloads.bramosystems.com/maven2/releases&lt;/url&gt;
+    &lt;/repository&gt;
+    . . .
+&lt;/repositories&gt;</source>
+            <p>
+                If you will also like to use the snapshots;
+            </p>
+            <source>
+&lt;repositories&gt;
+    . . .
+    &lt;repository&gt;
+        &lt;id&gt;bramosystems-snapshot&lt;/id&gt;
+        &lt;name&gt;Bramosystems Snapshots Repository&lt;/name&gt;
+        &lt;url&gt;http://downloads.bramosystems.com/maven2/snapshots&lt;/url&gt;
+    &lt;/repository&gt;
+    . . .
+&lt;/repositories&gt;</source>
+            <div class="top">
+                <a href="#">Top</a>
+            </div>
+        </section>
+
+        <section name="Developing with BST Player">
+
+            <p>
+                The following sections describe the basic usage of the library.  Ensure your
+                application module inherits the
+                <i>com.bramosystems.oss.player.core.Core</i> module.
+            </p>
+
+            <subsection name="Embedding the core player widgets">
+                <p>All core player widgets share the same API definition and can be used in almost
+                the same way. The following describes an example using the <code>WinMediaPlayer</code> class
+                in the <i>com.bramosystems.oss.player.core.client.ui</i> package.
+                <code>WinMediaPlayer</code> wraps the Windows Media Player plugin as a GWT widget.
+                </p>
+
+                <source>
+SimplePanel panel = new SimplePanel();   // create panel to hold the player
+AbstractMediaPlayer player = null;
+try {
+     // create the player, specifing URL of media
+     player = new WinMediaPlayer("www.example.com/mediafile.wma");
+     panel.setWidget(player); // add player to panel.
+} catch(LoadException e) {
+     // catch loading exception and alert user
+     Window.alert("An error occured while loading");
+} catch(PluginVersionException e) {
+     // required plugin version is not available, alert user
+     // possibly providing a link to the plugin download page.
+     panel.setWidget(new HTML(".. some nice message telling the user
+           to download plugin first .."));
+} catch(PluginNotFoundException e) {
+     // catch PluginNotFoundException and display a friendly notice.
+     panel.setWidget(PlayerUtil.getMissingPluginNotice(Plugin.WinMediaPlayer));
+}</source>
+
+                <p>
+                    The above code adds a Windows Media Player object to the panel and
+                    loads the media at the specified URL.  Controlling the plugin is straight
+                    forward as shown below:
+                </p>
+                <source>
+player.playMedia();  // starts playback
+player.pauseMedia();  // pauses playback
+player.stopMedia();  // stops playback
+player.setVolume(0.8); // sets the playback volume to 80% of maximum</source>
+
+                <p>
+                    The following table lists all core widgets, the supported plugin and the minimum
+                    plugin version required on the browser.
+                </p>
+
+                <table>
+                    <tr>
+                        <th>Player widget</th>
+                        <th>Media Plugin</th>
+                        <th>Minimum plugin version</th>
+                    </tr>
+                    <tr>
+                        <td>DivXPlayer</td>
+                        <td>DivX&#174; Web Player plugin</td>
+                        <td>2.0.1</td>
+                    </tr>
+                    <tr>
+                        <td>FlashMediaPlayer</td>
+                        <td>Flash&#174; Player plugin</td>
+                        <td>9.0</td>
+                    </tr>
+                    <tr>
+                        <td>QuickTimePlayer</td>
+                        <td>Quicktime Player plugin</td>
+                        <td>7.2.1</td>
+                    </tr>
+                    <tr>
+                        <td>VLCPlayer</td>
+                        <td>VLC Media Player plugin</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>WinMediaPlayer</td>
+                        <td>Windows Media Player</td>
+                        <td>7.0</td>
+                    </tr>
+                </table>
+
+                <p>
+                    Refer to the
+                    <a href="bst-player-api/apidocs/index.html">API documentation</a> for details.
+                </p>
+                <div class="top">
+                    <a href="#">Top</a>
+                </div>
+            </subsection>
+
+            <subsection name="Embedding HTML 5 media handlers">
+                <p>
+                    As of version 1.1, the
+                    <b>NativePlayer</b> class in the
+                    <i>com.bramosystems.oss.player.core.client.ui</i> package wraps the
+                    HTML 5 video element for use in HTML 5 supported browsers.
+                </p>
+                <p>
+                    The following example shows a basic usage:
+                </p>
+                <source>
+SimplePanel panel = new SimplePanel();   // create panel to hold the player
+AbstractMediaPlayer player = null;
+try {
+     // create the player, specifing URL of media
+     player = new NativePlayer("www.example.com/mediafile.ogv");
+     panel.setWidget(player); // add player to panel.
+} catch(LoadException e) {
+     // catch loading exception and alert user
+     Window.alert("An error occured while loading");
+} catch(PluginNotFoundException e) {
+     // catch PluginNotFoundException, thrown if client
+     // browser is not HTML 5 compliant
+     panel.setWidget(PlayerUtil.getMissingPluginNotice(e.getPlugin()));
+}</source>
+                <p>
+                    <b>
+                        <i>NOTE:- Works only on HTML 5 supported browsers</i>
+                    </b>
+                </p>
+                <div class="top">
+                    <a href="#">Top</a>
+                </div>
+            </subsection>
+
+            <subsection name="Embedding YouTube video">
+                <p>
+                    As of version 1.1, the YouTube module exposes the YouTube Player API
+                    inline with the interface/event handler definitions of the BST Player API.
+                </p>
+                <p>
+                    The
+                    <b>YouTubePlayer</b> class in the
+                    <i>com.bramosystems.oss.player.youtube.client</i> package wraps the
+                    YouTube video player
+                </p>
+                <p>
+                    Following is an example:
+                </p>
+                <source>
+SimplePanel panel = new SimplePanel();   // create panel to hold the player
+AbstractMediaPlayer player = null;
+try {
+     // create the player, specifing URL of media
+     player = new YouTubePlayer("http://www.youtube.com/v/video-id");
+     panel.setWidget(player); // add player to panel.
+} catch(PluginVersionException e) {
+     // required Flash plugin version is not available,
+     // alert user possibly providing a link to the plugin download page.
+     panel.setWidget(new HTML(".. some nice message telling the " +
+           "user to download plugin first .."));
+} catch(PluginNotFoundException e) {
+     // required Flash plugin not found, display a friendly notice.
+     panel.setWidget(PlayerUtil.getMissingPluginNotice(e.getPlugin()));
+}</source>
+                <p>
+                    The <b>ChromelessPlayer</b> class is also available to enable custom controls
+                    with the YouTube player.
+                </p>
+                <p>
+                    The following is an example:
+                </p>
+                <source>
+SimplePanel panel = new SimplePanel();   // create panel to hold the player
+AbstractMediaPlayer player = null;
+try {
+     // create the player, specifing URL of media
+    player = new ChromelessPlayer("http://www.youtube.com/v/video-id",
+        "100%", "350px");
+    CustomPlayerControl cpc = new CustomPlayerControl(cp);
+
+    FlowPanel fp = new FlowPanel();
+    fp.add(player);
+    fp.add(cpc);
+    panel.setWidget(fp); // add player and custom control to panel.
+} catch(PluginVersionException e) {
+     // required Flash plugin version is not available,
+     // alert user possibly providing a link to the plugin download page.
+     panel.setWidget(new HTML(".. some nice message telling the " +
+           "user to download plugin first .."));
+} catch(PluginNotFoundException e) {
+     // required Flash plugin not found, display a friendly notice.
+     panel.setWidget(PlayerUtil.getMissingPluginNotice(e.getPlugin()));
+}</source>
+                <p>
+                    <b>
+                        <i>NOTE:- Modules that use the YouTubePlayer widget should inherit
+                        the 
+                            <code>com.bramosystems.oss.player.youtube.YouTube</code> module.
+                        </i>
+                    </b>
+                </p>
+            </subsection>
+
+            <subsection name="Select a suitable player dynamically">
+                <p>
+                    The
+                    <a href="bst-player-api/apidocs/com/bramosystems/oss/player/core/client/PlayerUtil.html">
+                        PlayerUtil</a> class in the <i>com.bramosystems.oss.player.core.client</i> package
+                    defines overloaded methods to dynamically select a player that can playback a specfied
+                    media.
+                </p>
+                <p>
+                    A suitable player is determined based on the features/capabilities derivable
+                    from the player plugin, its availability on the browser, and its suitability to
+                    playback the specified media.
+                 </p>
+
+                <p>
+                    Here goes an example:
+                </p>
+                <source>
+SimplePanel panel = new SimplePanel();   // create panel to hold the player
+AbstractMediaPlayer player = null;
+try {
+     // get any player that can playback media
+     player = PlayerUtil.getPlayer(Plugin.AUTO, 
+                "http://www.example.com/some-funny-video.qt",
+                false, "50px", "100%");
+     panel.setWidget(player); // add player to panel.
+} catch(LoadException e) {
+     // catch loading exception and alert user
+     Window.alert("An error occured while loading");
+} catch (PluginVersionException e) {
+     // catch PluginVersionException, thrown if required plugin version is not found
+     panel.setWidget(PlayerUtil.getMissingPluginNotice(e.getPlugin()));
+} catch(PluginNotFoundException e) {
+     // catch PluginNotFoundException, thrown if no plugin is not found
+     panel.setWidget(PlayerUtil.getMissingPluginNotice(e.getPlugin()));
+}</source>
+                <div class="top">
+                    <a href="#">Top</a>
+                </div>
+            </subsection>
+        </section>
+
+        <section name="Conclusion">
+            <p>
+                With a simple set of API, BST Player provides an abstraction of popular media player
+                plugins available on the web, therefore making media playback control much more
+                fun filled.  Even more appealing is the dynamic player plugin selection that makes
+                the development of custom media player controls more interesting.
+            </p>
+        </section>
+
+        <section name="What next ?">
+            <p><a href="events.html">Using Events</a></p>
+            <p><a href="ui-binder.html">Use the player widgets with UiBinder</a></p>
+            <p><a href="javascript-support.html">Integrate the API in page-based applications</a></p>
+            <p><a href="custom-player.html">Create custom player controls</a></p>
+            <p><a href="script-exporter.html">Export your players as Javascript objects</a></p>
+            <div class="top">
+                <a href="#">Top</a>
+            </div>
+        </section>
+    </body>
+</document>

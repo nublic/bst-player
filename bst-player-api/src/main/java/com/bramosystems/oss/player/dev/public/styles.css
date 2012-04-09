@@ -1,0 +1,128 @@
+/*
+Document   : styles
+Created on : Jan 29, 2009, 10:50:07 PM
+Author     : Sikirulai Braheem <sbraheem at gmail.com>
+Description:
+Purpose of the stylesheet follows.
+*/
+
+@external case-code, ui-case-code, pre, code, media-desc, section-desc, content-wrapper;
+@external case-header, case-content, app-wrapper, app-footer, app-banner, app-version;
+@external player-MissingPlugin, player-MissingPlugin-title, player-MissingPlugin-message;
+
+.case-code {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-left: solid 1px #ccc;
+    font-family: monospace;
+    color: #4b4b93;
+}
+
+.ui-case-code {
+    background-color: #ffffdc;
+    padding: 10px;
+    border-left: solid 1px #ccc;
+    font-family:monospace;
+    color: #4b4b93;
+}
+
+@if !user.agent ie6 ie8 opera {
+    pre, code {
+    font-size: 120%;
+    }
+} @else {
+    pre, code {
+    font-size: 90%;
+    }
+}
+
+.content-wrapper {
+    margin-left: 5px;
+    border: 1px solid silver;
+}
+.case-header {
+    background-image: url(images/showcase-bg.png);
+    background-repeat: repeat-x;
+    border-bottom: outset 1px silver;
+    font-size: 150%;
+    padding: 7px;
+}
+.case-content {
+}
+
+.app-wrapper {
+    margin: 5px;
+}
+.app-footer {
+    font-size: 80%;
+    text-align:center;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+.app-banner {
+    margin-bottom: 0px;
+    font-size: 180%;
+    color: #4b4b93;
+    font-weight: bold;
+}
+.app-version {
+    margin-bottom: 10px;
+    color: #4b4b93;
+    font-weight: bold;
+    font-style:italic;
+}
+
+.link {
+    padding: 5px;
+}
+
+.menuPanel {
+    border: 1px solid silver;
+    border-top: none;
+    text-indent: 5px;
+    font-size: 85%;
+}
+
+.menuPanel .header {
+    background-image: url(images/showcase-bg.png);
+    background-repeat: repeat-x;
+    border-top: 1px solid silver;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 2;
+}
+
+.menuPanel .content {
+}
+
+.menuPanel .content a {
+    text-decoration: none;
+}
+
+
+.section-desc {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #4b4b93;
+}
+
+.media-desc {
+    margin-top: 5px;
+    font-size: 90%;
+    font-style: italic;
+}
+.player-MissingPlugin {
+    border: solid 3px #b1b1db;
+    font-size: 70%;
+}
+
+.player-MissingPlugin-title {
+    background-color: #b1b1db;
+    text-indent: 5px;
+    font-weight: bold;
+}
+
+.player-MissingPlugin-message {
+    padding: 5px;
+}
+

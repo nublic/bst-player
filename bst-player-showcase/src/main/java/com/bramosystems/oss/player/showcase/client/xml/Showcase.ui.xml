@@ -1,0 +1,41 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
+xmlns:showcase="urn:import:com.bramosystems.oss.player.showcase.client">
+    <ui:style field='x'>
+        .stage {
+            line-height: 1.5;
+            margin: 2px;
+            padding: 2px 5px;
+        }
+        .west {
+            width: 150px;
+            float: left;
+        }
+        .east {
+            border-left: 1px solid #a5a5a5;
+            padding-bottom: 20px;
+            width: 775px;
+            float: right;
+        }
+        .options {
+            bottom: 0px;
+            position: fixed;
+            background-color: #ffffff;
+            width: 950px;
+            margin: auto;
+            border-left: 1px solid #4b4b93;
+            border-right: 1px solid #4b4b93;
+        }
+        .menu {
+            margin: 2px;
+            padding: 3px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <showcase:MenuController styleName='{x.west} {x.menu}' ui:field='menu' />
+        <showcase:StageController styleName='{x.east} {x.stage}' ui:field='stage' />
+        <showcase:ControlPane styleName='{x.options}' ui:field='controlPane' />
+    </g:HTMLPanel>
+</ui:UiBinder>

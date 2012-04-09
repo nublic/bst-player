@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<asx version='3.0'>
+    <abstract>description of entry</abstract>
+    <author>author of list</author>
+    <copyright>copyright info</copyright>
+    <entry>
+        <title>An Entry in a Simple ASX</title>
+        <abstract>description of entry</abstract>
+        <author>Microsoft Corporation</author>
+        <copyright>(c)2003 Microsoft Corporation</copyright>
+        <duration value="9:50" />
+        <ref href="mms://windowsmediaserver/path/yourfile.asf">
+            <duration value="9:50" />
+            <endmarker name="" number="" />
+        </ref>
+    </entry>
+    <entryref href="test" />
+    <moreinfo href="www.example.com" />
+    <param name="testing" value="yes" />
+    <title>Simple ASX Demo</title>
+</asx>

@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Javascript Support</title>
+    </properties>
+    <head>
+        <meta name="description" content="Use the API in traditional page based applications" />
+        <style>
+            .player-CSSSeekBar {
+            background-color: silver;
+            }
+            .player-CSSSeekBar .loading {
+            background-color: yellow;
+            cursor: pointer;
+            }
+            .player-CSSSeekBar .playing {
+            background-color: red;
+            cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <section name="Javascript Support">
+
+            <p>
+                Every GWT application ends up as a package of Javascript files optimized for each browser.
+                How about taking advantage of the breath-taking features of GWT in traditional page-based
+                applications?
+            </p>
+            <p>
+                The API features a module to export the core player and seekbar widgets as Javascript objects
+                for use in page-based applications.  The following sections describe how to use the
+                exported widgets.
+            </p>
+
+            <subsection name="Add the script to the host page">
+                <p>
+                    Download the <a href="http://code.google.com/p/bst-player/downloads/list">BST Player JS
+                    Library</a> and unzip into a folder of your choice.  The library is a GWT application
+                    exporting the core player and seekbar widgets as Javascript objects.
+                </p>
+                
+                <p>Add the
+                    <code>bst_player_js/bst_player_js.nocache.js</code> javascript file to the HTML host page.
+                </p>
+
+                <source>
+&lt;script type="text/javascript" src="folder-name/bst_player_js/bst_player_js.nocache.js"&gt;
+&lt;/script&gt;</source>
+            </subsection>
+
+            <subsection name="Create the widgets HTML container elements">
+                Create the HTML elements that will contain the widgets.  This can be as simple
+                as defining HTML &lt;div&gt; tags at required places.
+
+                <source>
+&lt;div id="my-player" /&gt;
+&lt;div id="_progress" /&gt;</source>
+            </subsection>
+
+            <subsection name="Define the onBSTPlayerReady() function">
+                The library requires the
+                <code>onBSTPlayerReady()</code> function be defined.  This
+                function will be called when the player and/or seekbar objects are bound to the host page.
+                
+                <source>
+&lt;script type="text/javascript"&gt;
+   var onBSTPlayerReady = function() {
+   }
+&lt;/script&gt;</source>
+
+                Typically, all player widget creation and manipulation should happen after this function
+                call.
+            </subsection>
+            
+            <subsection name="Create the widgets and use as required">
+                The player object is bound as a
+                <code>bstplayer.Player(plugin, mediaURL, autoplay,
+                width, height, options)
+                </code> object where:
+                <ul>
+                    <li>
+                        <code>plugin</code> [String]  - is one of the supported media plugins
+                    (Note: case-sensitive)
+                    </li>
+                    <li>
+                        <code>mediaURL</code> [String]  - the URL of the media
+                    </li>
+                    <li>
+                        <code>autoplay</code> [boolean] - true to autoplay the media, false otherwise
+                    </li>
+                    <li>
+                        <code>width</code> [String]  - the width of the widget (in CSS units)
+                    </li>
+                    <li>
+                        <code>height</code> [String]  - the height of the widget (in CSS units)
+                    </li>
+                    <li>
+                        <code>options</code> [Javascript Object] - used to pass user-defined map of values
+                    to the library (currently not used, should be
+                        <code>null</code>)
+                    </li>
+                </ul>
+                
+                The seekbar widget is bound as a <code>bstplayer.SeekBar(height, containerId, options)</code>
+                object where:
+
+                <ul>
+                    <li>
+                        <code>height</code> [String] - the height of the widget (in CSS units)
+                    </li>
+                    <li>
+                        <code>containerId</code> [String] - the HTML element
+                        <code>id</code>, where the
+                    widget will be placed
+                    </li>
+                    <li>
+                        <code>options</code> [Javascript Object] - used to pass user-defined map of values
+                    to the library (currently not used, should be
+                        <code>null</code>)
+                    </li>
+                </ul>
+
+                Once the Player object is created, the corresponding widget can be attached to the page by
+                calling the object's 
+                <code>inject()</code> method. The
+                <code>inject()</code> method takes
+                the
+                <code>id</code> of the HTML container element as a parameter.  Following is an example:
+
+                <source>
+&lt;script type="text/javascript"&gt;
+  var onBSTPlayerReady = function() {
+      player = new bstplayer.Player("Auto", "some-cool-sound.mp3", false, "100%", "50px", null);
+      player.inject('my-player');
+
+      seekbar = new bstplayer.SeekBar(10, '_progress', null);
+  }
+&lt;/script&gt;</source>
+            </subsection>
+                
+            <subsection name="The supported plugins">
+                <p>The <code>plugin</code> parameter of the <code>Player</code> object
+                can be one of the following values:</p>
+
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Media Plugin</th>
+                    </tr>
+                    <tr>
+                        <td>DivXPlayer</td>
+                        <td>DivX&#174; Web Player plugin</td>
+                    </tr>
+                    <tr>
+                        <td>FlashPlayer</td>
+                        <td>Adobe Flash plugin for playing Flash supported file formats</td>
+                    </tr>
+                    <tr>
+                        <td>Native</td>
+                        <td>HTML 5 video handler in supported browsers</td>
+                    </tr>
+                    <tr>
+                        <td>QuickTimePlayer</td>
+                        <td>QuickTime plugin</td>
+                    </tr>
+                    <tr>
+                        <td>VLCPlayer</td>
+                        <td>VLC Media Player plugin</td>
+                    </tr>
+                    <tr>
+                        <td>WinMediaPlayer</td>
+                        <td>Windows Media Player plugin</td>
+                    </tr>
+                    <tr>
+                        <td>Auto</td>
+                        <td>Any avaliable media plugin on the client that supports the specified media URL</td>
+                    </tr>
+                    <tr>
+                        <td>PlaylistSupport</td>
+                        <td>Any available media plugin that supports client side playlist management</td>
+                    </tr>
+                </table>
+            </subsection>
+
+            <subsection name="Object methods and properties" >
+                <p>
+                    The
+                    <code>Player</code> object supports all the public methods defined in the
+                    <a href="bst-player-api/apidocs/com/bramosystems/oss/player/core/client/AbstractMediaPlayer.html">
+                        AbstractMediaPlayer
+                    </a> class and the
+                    <a href="bst-player/bst-player-api/apidocs/com/bramosystems/oss/player/core/client/PlaylistSupport.html">
+                            PlaylistSupport
+                    </a> interface, with the exception of all the <code>addXXXHandler</code> methods.
+                </p>
+
+                <p>
+                    The <code>SeekBar</code> object supports the following methods:
+                </p>
+
+                <table>
+                    <tr>
+                        <th>Method</th>
+                        <th>Parameter Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>setLoadingProgress(loadingProgress)</td>
+                        <td>float</td>
+                        <td>set the progress of the media loading operation</td>
+                    </tr>
+                    <tr>
+                        <td>setPlayingProgress(playingProgress)</td>
+                        <td>float</td>
+                        <td>set the progress of the media playback operation</td>
+                    </tr>
+                </table>
+            </subsection>
+
+            <subsection name="Event Handling" >
+                <p>
+                    Instead of the <code>addXXXHandler</code> methods, the <code>Player</code> object
+                    defines an <code>addEventListener(name, function)</code> method with the following
+                    event names:
+                </p>
+
+                <table>
+                    <tr>
+                        <th>Event name</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>onPlayerState</td>
+                        <td>for PlayerStateEvent events</td>
+                    </tr>
+                    <tr>
+                        <td>onPlayState</td>
+                        <td>for PlayStateEvent events</td>
+                    </tr>
+                    <tr>
+                        <td>onLoadingProgress</td>
+                        <td>for LoadingProgressEvent events</td>
+                    </tr>
+                    <!--tr>
+                        <td>onMediaInfo</td>
+                        <td>for MediaInfoEvent events</td>
+                    </tr-->
+                    <tr>
+                        <td>onError</td>
+                        <td>for DebugEvent events of the Error type</td>
+                    </tr>
+                    <tr>
+                        <td>onDebug</td>
+                        <td>for DebugEvent events of the Info type</td>
+                    </tr>
+                </table>
+
+                <p>
+                    The <code>SeekBar</code> object also defines an <code>addEventListener(name,
+                    function)</code> method with the following event name:
+                </p>
+                <table>
+                    <tr>
+                        <th>Event name</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>onSeekChanged</td>
+                        <td>for SeekChangeEvent events</td>
+                    </tr>
+                </table>
+
+                <p>
+                    The function registered as an event listener is passed an event object containing
+                    various properties describing the status of the event.  The following table lists
+                    the properties of each event object
+                </p>
+                <table>
+                    <tr>
+                        <th>Event name</th>
+                        <th>Event properties</th>
+                        <th>Property Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>onPlayerState</td>
+                        <td>playerState</td>
+                        <td>String</td>
+                        <td>the state of the player. Values can be one of:
+                        <br/> <code>Ready</code> - player is initialized and ready for interaction,
+                        <br/> <code>BufferingStarted</code> - player has started buffering,
+                        <br/> <code>BufferingFinished</code> - player has stopped buffering,
+                        <br/> <code>DimensionChangedOnVideo</code> - the dimension of the player has
+                        changed to match the size of the current media, especially video
+                        <br/> <code>FullScreenStarted</code> - player has entered fullscreen
+                        <br/> <code>FullScreenFinished</code> - player has returned from fullscreen
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>onPlayState</td>
+                        <td>playState</td>
+                        <td>String</td>
+                        <td>the state of media playback. Values can be one of:
+                        <br/> <code>Started</code> - playback has started,
+                        <br/> <code>Finished</code> - playback has finished,
+                        <br/> <code>Paused</code> - playback is currently paused,
+                        <br/> <code>Stopped</code> - playback is currently stopped
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>itemIndex</td>
+                        <td>int</td>
+                        <td>the index of the media item in the playlist</td>
+                    </tr>
+                    <tr>
+                        <td>onLoadingProgress</td>
+                        <td>progress</td>
+                        <td>float</td>
+                        <td>the loading progress. Value is between <code>0</code> and <code>1</code></td>
+                    </tr>
+                    <!--tr>
+                        <td>onMediaInfo</td>
+                        <td>for MediaInfoEvent events</td>
+                    </tr-->
+                    <tr>
+                        <td>onError</td>
+                        <td>message</td>
+                        <td>String</td>
+                        <td>message associated with the error event</td>
+                    </tr>
+                    <tr>
+                        <td>onDebug</td>
+                        <td>message</td>
+                        <td>String</td>
+                        <td>message associated with the debug event</td>
+                    </tr>
+                    <tr>
+                        <td>onSeekChanged</td>
+                        <td>seekPosition</td>
+                        <td>float</td>
+                        <td>the new position of the seek bar. Value is between <code>0</code>
+                        and <code>1</code></td>
+                    </tr>
+                </table>
+            </subsection>
+
+            <subsection name="Seekbar styling" >
+                <p>The seekbar consists of two indicators - loading and progress indicators.  The loading
+                indicator is placed directly under the playing indicator.  The loading indicator shows the
+                progress of a media loading operation while the playing indicator shows the progress of
+                media playback</p>
+
+                <p>The seekbar has the following CSS style classes registered already and can be
+                used to change the apperance to taste</p>
+
+                <source>
+.player-CSSSeekBar { the seekbar itself }
+.player-CSSSeekBar .loading { the loading progress indicator }
+.player-CSSSeekBar .playing { the playing progress indicator }</source>
+            </subsection>
+
+            <subsection name="Example">
+                <p>The example below illustrates a custom player implementation:</p>
+
+                <source>
+&lt;style&gt;
+    .player-CSSSeekBar {
+        background-color: silver;
+    }
+    .player-CSSSeekBar .loading {
+        background-color: yellow;
+        cursor: pointer;
+    }
+    .player-CSSSeekBar .playing {
+        background-color: red;
+        cursor: pointer;
+    }
+&lt;/style&gt;
+
+&lt;script type='text/javascript'&gt;
+ var player;
+ var seekbar;
+ var onBSTPlayerReady = function() {
+      seekbar = new bstplayer.SeekBar(10, '_progress', null);
+      seekbar.addEventListener('onSeekChanged', function(evt){
+          player.setPlayPosition(evt.seekPosition * player.getMediaDuration());
+      });
+
+      player = new bstplayer.Player('Auto', 'demo/bst-player-js/tools/applause.mp3',
+                                false, null, null, null);
+      player.addEventListener('onPlayState', function(evt){
+          switch(evt.playState) {
+              case 'Paused':
+                  document.getElementById('playButton').disabled = false;
+                  document.getElementById('pauseButton').disabled = true;
+                  document.getElementById('stopButton').disabled = false;
+                  break;
+              case 'Started':
+                  document.getElementById('playButton').disabled = true;
+                  document.getElementById('pauseButton').disabled = false;
+                  document.getElementById('stopButton').disabled = false;
+                  break;
+              case 'Stopped':
+              case 'Finished':
+                  document.getElementById('playButton').disabled = false;
+                  document.getElementById('pauseButton').disabled = true;
+                  document.getElementById('stopButton').disabled = true;
+                  break;
+          }
+      });
+      player.addEventListener('onPlayerState', function(evt){
+          if(evt.playerState == 'Ready') {
+              document.getElementById('playButton').disabled = false;
+              document.getElementById('pauseButton').disabled = true;
+              document.getElementById('stopButton').disabled = true;
+
+              playTimer = window.setInterval(function(){
+                  seekbar.setPlayingProgress(player.getPlayPosition() /
+                            player.getMediaDuration());
+                  document.getElementById('timer').innerHTML =
+                    (player.getPlayPosition() / 1000) + ' / ' +
+                    (player.getMediaDuration() / 1000);
+              }, 1000);
+          }
+      });
+      player.addEventListener('onLoadingProgress', function(evt){
+          seekbar.setLoadingProgress(evt.progress);
+      });
+      player.addEventListener('onError', function(evt){
+          window.alert(evt.message);
+      });
+      player.inject('_pid');
+  }
+&lt;/script&gt;
+&lt;script type='text/javascript'
+    src='demo/bst-player-js/bst_player_js/bst_player_js.nocache.js'&gt;&lt;/script&gt;
+
+&lt;div align='center' style='width:350px;margin:20px;border:silver 1px solid;padding:5px'&gt;
+    &lt;div id='_pid'&gt;&lt;/div&gt;
+    &lt;div id='_progress'&gt;&lt;/div&gt;
+    &lt;div style='padding:10px'&gt;
+        &lt;button id='playButton' onclick='player.playMedia()' disabled&gt;Play&lt;/button&gt;
+        &lt;button id='pauseButton' onclick='player.pauseMedia()' disabled&gt;Pause&lt;/button&gt;
+        &lt;button id='stopButton' onclick='player.stopMedia()' disabled&gt;Stop&lt;/button&gt;
+        &lt;div id='timer'&gt;0 / 0&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</source>
+
+                And the result?
+
+                <script type="text/javascript" src="js/js-support.js"></script>
+                <script type="text/javascript" src="demo/bst-player-js/bst_player_js/bst_player_js.nocache.js"></script>
+                <div align="center" style="width:350px;margin:20px;border:silver 1px solid;padding:5px">
+                    <div id="_pid"></div>
+                    <div id="_progress"></div>
+                    <div style="padding:10px">
+                        <button id="playButton" onclick="player.playMedia()" disabled="disabled">Play</button>
+                        <button id="pauseButton" onclick="player.pauseMedia()" disabled="disabled">Pause</button>
+                        <button id="stopButton" onclick="player.stopMedia()" disabled="disabled">Stop</button>
+                        <div id='timer'>0 / 0</div>
+                    </div>
+                </div>
+            </subsection>
+        </section>
+    </body>
+</document>

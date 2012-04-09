@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>bst-player</artifactId>
+        <groupId>com.bramosystems.oss.player</groupId>
+        <version>1.4-SNAPSHOT</version>
+    </parent>
+    <artifactId>bst-player-showcase</artifactId>
+    <packaging>war</packaging>
+    <name>BST Player Showcase</name>
+    <description>
+        Showcases the features of the BST Player API
+    </description>
+
+    <build>
+        <finalName>bst-player-showcase</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <configuration>
+                    <module>com.bramosystems.oss.player.showcase.Showcase</module>
+                    <disableCastChecking>true</disableCastChecking>
+                    <disableClassMetadata>true</disableClassMetadata>
+                    <soyc>false</soyc>
+                    <runTarget>index.html</runTarget>
+                    <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
+                    <copyWebapp>true</copyWebapp>
+                    <bindAddress>0.0.0.0</bindAddress>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>showcase</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
+            <artifactId>bst-player-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

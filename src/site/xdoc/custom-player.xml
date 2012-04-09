@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Custom Player Controls</title>
+    </properties>
+    <head>
+        <meta name="description" content="Create custom player controls with BST Player API" />
+    </head>
+    <body>
+        <section name="Developing custom player controls">
+
+            <p>
+                Two classes are provided to facilitate the development of custom player controls -
+                <code>CustomAudioPlayer</code> and <code>CustomVideoPlayer</code>.  Both classes are in
+                the <code>com.bramosystems.oss.player.core.client.skin</code> package.
+            </p>
+            <p>
+                Both implementation takes care of the media player plugin integration.  All that 
+                is required is the development of the UI controls and how it reacts to the state of
+                the underlying media plugin.
+            </p>
+
+            <subsection name="CustomAudioPlayer or CustomVideoPlayer ?">
+                <p>
+                    As the names suggest, <code>CustomAudioPlayer</code> is provided for custom audio player
+                    controls while <code>CustomVideoPlayer</code> is provided for custom video player controls.
+                </p>
+
+                <p>
+                    <code>CustomAudioPlayer</code> integrates the player plugin and makes it invisible on
+                    the page.  But <code>CustomVideoPlayer</code> makes the player plugin visible replacing
+                    the plugins' controls with that specified by you - that is, the video display is placed
+                    directly on top of the player controls.
+                </p>
+            </subsection>
+
+            <subsection name="Custom seekbar control">
+                <p>The ability to seek through media playback in an important feature of media players.
+                The API provides simple implementation that can be customised to taste.</p>
+
+                <p>The <code>MediaSeekBar</code> abstract class in the
+                <code>com.bramosystems.oss.player.core.client.skin</code> package presents two indicators -
+                loading and progress indicators.  The loading indicator is placed directly under the
+                playing indicator.  The loading indicator shows the progress of a media loading
+                operation while the playing indicator shows the progress of media playback.  The length of
+                both indicators show the progress of the operation they represent.</p>
+
+                <p>An implementation of the <code>MediaSeekBar</code> - the <code>CSSSeekBar</code> class,
+                provides the ability to customise the appearance of the seekbar via CSS.  The class defines
+                the following CSS styles:</p>
+
+                <source>
+.player-CSSSeekBar { the seekbar itself }
+.player-CSSSeekBar .loading { the loading progress indicator }
+.player-CSSSeekBar .playing { the playing progress indicator }</source>
+            </subsection>
+
+            <subsection name="Putting it together">
+                <p>This example illustrates how simple it can be:</p>
+
+                <source>
+public class MyPlayer extends CustomAudioPlayer {
+
+    public MyPlayer(String url, String height, String width) throws
+            PluginNotFoundException, PluginVersionException, LoadException {
+        super(Plugin.Auto, url, false, height, width);  
+        // of course, you can specify any plugin you wish
+
+        // create the UI components
+        Button play = new Button("Play", new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                try {
+                    playMedia();
+                } catch (PlayException ex) {}
+            }
+        });
+        Button pause = new Button("Pause", new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                pauseMedia();
+            }
+        });
+        Button stop = new Button("Stop", new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                stopMedia();
+            }
+        });
+        Label label = new Label("0 / 0");
+
+        // create a seekbar with CSS styling ...
+        CSSSeekBar seekbar = new CSSSeekBar(10);
+        seekbar.addSeekChangeHandler(new SeekChangeHandler() {
+
+            // change play position when the seek is changed by user
+            @Override
+            public void onSeekChanged(SeekChangeEvent event) {
+                setPlayPosition(event.getSeekPosition() * getMediaDuration());
+            }
+        });
+
+        // arrange the UI
+        FlowPanel fp = new FlowPanel();
+        fp.setStyleName("my-style");
+        fp.add(seekbar);
+        fp.add(play);
+        fp.add(pause);
+        fp.add(stop);
+        fp.add(label);
+
+        // put the player control on the panel &lt; IMPORTANT &gt;
+        setPlayerControlWidget(fp);
+
+        // update controls based on playback state ...
+        addPlayStateHandler(new PlayStateHandler() {
+
+            @Override
+            public void onPlayStateChanged(PlayStateEvent event) {
+                switch(event.getPlayState()) {
+                  case Paused:
+                      play.setEnabled(false);
+                      pause.setEnabled(true);
+                      stop.setEnabled(false);
+                      break;
+                  case Started:
+                      play.setEnabled(true);
+                      pause.setEnabled(false);
+                      stop.setEnabled(false);
+                      break;
+                  case Stopped:
+                  case Finished:
+                      play.setEnabled(false);
+                      pause.setEnabled(true);
+                      stop.setEnabled(true);
+                      break;
+               }
+            }
+        });
+
+        // monitor loading progress and indicate on seekbar
+        addLoadingProgressHandler(new LoadingProgressHandler() {
+
+            @Override
+            public void onLoadingProgress(LoadingProgressEvent event) {
+                seekbar.setLoadingProgress(event.getProgress());
+            }
+        });
+
+        // monitor playing progress &amp; update timer display ...
+        Timer timer = new Timer() {
+
+            @Override
+            public void run() {
+                seekbar.setPlayingProgress(getPlayPosition() /
+                    getMediaDuration());
+                label.setText((getPlayPosition() / 1000) + " / " +
+                    (getMediaDuration() / 1000));
+            }
+        };
+        timer.scheduleRepeating(1000);
+    }
+}</source>
+
+<p>It is as simple as that, isn't it? :-)</p>
+            </subsection>
+        </section>
+    </body>
+</document>

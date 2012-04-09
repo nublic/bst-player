@@ -1,0 +1,61 @@
+{
+    "playlist" :
+    {
+        "title"         : "JSPF Playlist Example",
+        "creator"       : "Artist name",
+        "annotation"    : "Sample playlist created for BST Player API",
+        "info"          : "http://oss.bramosystems.com/bst-player",
+        "location"      : "http://oss.bramosystems.com/bst-player/demo/showcase/",
+        "identifier"    : "playlist canonical id",
+        "image"         : "http://example.com/",
+        "date"          : "2005-01-08T17:10:47-05:00",
+        "license"       : "http://www.apache.org/licenses/LICENSE-2.0.txt",
+        "attribution"   : [
+        {
+            "identifier"   : "http://example.com/"
+        },
+
+        {
+            "location"     : "http://example.com/"
+        }
+        ],
+        "track"         : [
+        {
+            "location"      : ["applause.mp3"],
+            "identifier"    : ["idx1"],
+            "title"         : "Applause",
+            "creator"       : "Unknown",
+            "annotation"    : "Just an applause",
+            "info"          : "",
+            "image"         : "",
+            "album"         : "Sample Playlist",
+            "trackNum"      : 1,
+            "duration"      : 5000
+        },
+        {
+            "location"      : ["big-buck-bunny.mp4"],
+            "identifier"    : ["idx2"],
+            "title"         : "Big Buck Bunny",
+            "creator"       : "Unknown",
+            "annotation"    : "Big Buck Bunny Preview",
+            "info"          : "",
+            "image"         : "",
+            "album"         : "Sample Playlist",
+            "trackNum"      : 2,
+            "duration"      : 60000
+        },
+        {
+            "location"      : ["traffic.flv"],
+            "identifier"    : ["idx3"],
+            "title"         : "Evening traffic shot",
+            "creator"       : "Sikiru Braheem",
+            "annotation"    : "Evening Traffic Shot",
+            "info"          : "",
+            "image"         : "",
+            "album"         : "Sample Playlist",
+            "trackNum"      : 3,
+            "duration"      : 10000
+        }
+        ]
+    }
+}

@@ -1,0 +1,44 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field="x" type="com.bramosystems.oss.player.showcase.client.res.Bundle"/>
+    <ui:style field='y'>
+        .options {
+            margin-top: 5px;
+            width: 20%;
+            float: left;
+        }
+        .title {
+            font-size: 90%;
+            font-weight: bold;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div class='{x.css.controlPaneButtonPanel}'>
+            <g:Button ui:field='relButton'>Reload Player</g:Button>
+        </div>
+        <g:HTMLPanel styleName='{y.options}'>
+            <div class='{y.title}'>General Properties</div>
+            <g:CheckBox ui:field='controls'>Show Controls</g:CheckBox>
+            <br/>
+            <g:CheckBox ui:field='logger'>Show Logger</g:CheckBox>
+            <br/>
+            <g:CheckBox ui:field='resizeToVideo'>Resize to Video Size</g:CheckBox>
+            <br/>
+            <g:CheckBox ui:field='shuffle'>Shuffle Playlist</g:CheckBox>
+        </g:HTMLPanel>
+        <g:HTMLPanel styleName='{y.options}'>
+            <div class='{y.title}'>Playlist Repeat</div>
+            <g:RadioButton name='repeat' ui:field='repeatOff'>Repeat Off</g:RadioButton>
+            <br/>
+            <g:RadioButton name='repeat' ui:field='repeatOne'>Repeat One</g:RadioButton>
+            <br/>
+            <g:RadioButton name='repeat' ui:field='repeatAll'>Repeat All</g:RadioButton>
+        </g:HTMLPanel>
+        <div class='x.css.clear'></div>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,112 @@
+<!--
+    Document   : index
+    Created on : Jan 29, 2009, 10:22:05 PM
+    Author     : Sikirulai Braheem <sbraheem at gmail.com>
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="description" content="Demo application shows examples of using
+              the BST Player API to embed multimedia files in GWT applications." />
+
+        <title>BST Player Showcase - Demo Application</title>
+        <link href="styles.css" type="text/css" rel="stylesheet" />
+        <style type="text/css">
+            .player-CSSSeekBar .loading {
+                cursor: pointer;
+                background: #ffff99;
+            }
+            .player-CSSSeekBar .playing {
+                cursor: pointer;
+                background: red;
+            }
+            .player-CSSSeekBar {
+                vertical-align:middle;
+                background: #dadada;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" language="javascript" src="bst_player_js/bst_player_js.nocache.js"></script>
+
+        <script type="text/javascript">
+            var player;
+            var seekbar;
+            var onBSTPlayerReady = function() {
+                seekbar = new bstplayer.SeekBar(10, '_progress', null);
+                seekbar.addEventListener("onSeekChanged", function(evt){
+                    window.alert(evt.seekPosition);
+                    player.setPlayPosition(evt.seekPosition * player.getMediaDuration());
+                });
+
+                player = new bstplayer.Player("Auto",
+                "/xplorer/g:/Yemi%20Sax/Saxophone%20Mood/03%20Good%20Or%20Bad.mp3",
+                false, null, null, null);
+                player.setLoopCount(-1);
+                //                player.showLogger(true);
+                //                player.setResizeToVideoSize(true);
+                player.addEventListener("onPlayState", function(evt){
+                    switch(evt.playState) {
+                        case 'Paused':
+                            document.getElementById("playButton").disabled = false;
+                            document.getElementById("pauseButton").disabled = true;
+                            document.getElementById("stopButton").disabled = false;
+                            break;
+                        case 'Started':
+                            document.getElementById("playButton").disabled = true;
+                            document.getElementById("pauseButton").disabled = false;
+                            document.getElementById("stopButton").disabled = false;
+                            break;
+                        case 'Stopped':
+                        case 'Finished':
+                            document.getElementById("playButton").disabled = false;
+                            document.getElementById("pauseButton").disabled = true;
+                            document.getElementById("stopButton").disabled = true;
+                            break;
+                    }
+                });
+                player.addEventListener("onPlayerState", function(evt){
+                    if(evt.playerState == 'Ready') {
+                        document.getElementById("playButton").disabled = false;
+                        document.getElementById("pauseButton").disabled = true;
+                        document.getElementById("stopButton").disabled = true;
+
+                        playTimer = window.setInterval(function(){
+                            seekbar.setPlayingProgress(player.getPlayPosition() / player.getMediaDuration());
+                        }, 1000);
+                    }
+                });
+                player.addEventListener("onLoadingProgress", function(evt){
+                    seekbar.setLoadingProgress(evt.progress);
+                });
+                player.inject('_pid');
+
+            }
+        </script>
+
+        <div style="width:350px">
+            <div id="_pid"></div>
+            <div>
+                <button id="playButton" onclick="player.playMedia()" disabled >Play</button>
+                <button id="pauseButton" onclick="player.pauseMedia()" disabled >Pause</button>
+                <button id="stopButton" onclick="player.stopMedia()" disabled >Stop</button>
+            </div>
+            <div id="_progress"></div>
+        </div>
+
+        <!--script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost +
+                "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+            try {
+                var pageTracker = _gat._getTracker("UA-7535603-3");
+                pageTracker._trackPageview();
+            } catch(err) {}
+        </script-->
+    </body>
+</html>

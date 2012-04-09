@@ -1,0 +1,58 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field="y" type="com.bramosystems.oss.player.showcase.client.res.Bundle"/>
+    <ui:style field='x'>
+        .panel-left {
+            width: 70%;
+            float: left;
+        }
+        .panel-right {
+            width: 27%;
+            float: right;
+        }
+        .option-left {
+            width: 50%;
+            float: left;
+        }
+        .option-right {
+            width: 50%;
+            float: right;
+        }
+        .options {
+            margin: 1em;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:SimplePanel styleName='{x.panel-left}' ui:field='video'></g:SimplePanel>
+        <div class='{x.panel-right}'>
+            <div>Transform Options</div>
+            <div class='{x.options}'>
+                <div class='{x.option-left}'>Scale</div>
+                <g:ListBox styleName='{x.option-right}' ui:field='scale'></g:ListBox>
+                <div class='{y.css.clear}'></div>
+            </div>
+            <div class='{x.options}'>
+                <div class='{x.option-left}'>Translate</div>
+                <g:ListBox styleName='{x.option-right}' ui:field='xlate'></g:ListBox>
+                <div class='{y.css.clear}'></div>
+            </div>
+            <div class='{x.options}'>
+                <div class='{x.option-left}'>Rotate</div>
+                <g:ListBox styleName='{x.option-right}' ui:field='rotate'></g:ListBox>
+                <div class='{y.css.clear}'></div>
+            </div>
+            <div class='{x.options}'>
+                <div class='{x.option-left}'>Skew</div>
+                <g:ListBox styleName='{x.option-right}' ui:field='skew'></g:ListBox>
+                <div class='{y.css.clear}'></div>
+            </div>
+            <g:Button ui:field='xforms'>Clear Transforms</g:Button>
+        </div>
+        <div class='{y.css.clear}'></div>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,14 @@
+.top {
+    text-align:right;
+}
+.source {
+    font-size:120%;
+}
+
+#ohloh {
+    margin-left: 10px;
+    padding: 5px;
+    text-align: center;
+    float:right;
+    background-color:#eeeded;
+}

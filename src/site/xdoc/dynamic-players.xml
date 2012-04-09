@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Dynamically select player widgets</title>
+    </properties>
+    <head>
+        <meta name="description" content="A map of mime-type provides the ability to automatically
+        select player instances for specified URLs" />
+    </head>
+    <body>
+        <section name="Select Player widgets dynamically">
+
+            <p>
+                The API feature an utility class - <code>PlayerUtil</code> that creates player
+                instances considered suitable for a specified media URL.  The utility methods depend
+                on a mapping of audio/video mime-types and registered extensions.
+            </p>
+
+            <subsection name="Default Mapping">
+                <p>
+                The default mapping below is defined in the <code>default-mime-type.properties</code>
+                file in the <code>com.bramosystems.oss.player.core.rebind</code> package.
+                </p>
+
+                <source>
+####################################################################
+#   Default Audio/Video Mime Types
+####################################################################
+# Audio types ...
+audio/3gpp              3gp,3gpp
+audio/3gpp2             3g2,3gp2,3gpp2
+audio/aiff              aiff,aif,aifc,cdda
+audio/aac               aac,adts
+audio/ac3               ac3
+audio/amr               amr
+audio/amr-wb            awb,amrw
+audio/ATRAC-ADVANCED-LOSSLESS   aa1,aa3,omg
+audio/ATRAC-X           atx,aa3,omg
+audio/ATRAC3            at3,aa3,omg
+audio/basic             snd,au,ulw
+audio/EVRC              evc
+audio/EVRCB             evb
+audio/EVRC-QCP          qcp
+audio/SMV-QCP           qcp
+audio/mid               rmi,mid,smf,kar,midi
+audio/midi              rmi,mid,smf,kar,midi
+audio/x-midi            rmi,mid,smf,kar,midi
+audio/mobile-xmf        mxmf
+audio/mp3               mp3,swa
+audio/mpeg3             mp3,swa
+audio/mp4               mp4,mpg4
+audio/mpeg              mpeg,mpg,m1s,m1a,m2a,mp1,mp2,mp3,mpm,mpa,mpga,mpega,swa
+audio/ogg               oga,ogg,spx,ogga
+audio/wav               wav,bwf
+audio/x-aiff            aif,aifc,aiff,cdda
+audio/x-aifc            aiff
+audio/x-aac             aac,adts
+audio/x-caf             caf
+audio/x-ac3             ac3
+audio/x-gsm             gsm
+audio/x-m4a             m4a
+audio/x-m4b             m4b
+audio/x-m4p             m4p
+audio/x-mp3             mp3,swa
+audio/x-mpeg3           mp3,swa
+audio/x-mpeg            mpeg,mpg,m1s,m1a,m2a,mp1,mp2,mp3,mpm,mpa,mpga,mpega,swa
+audio/x-mpegurl         m3u
+audio/x-pn-realaudio    ra,ram
+audio/x-wav             wav,bwf
+audio/x-ms-wma          wma
+audio/x-ms-wax          wax
+audio/x-matroska 	mka
+
+# Video types ...
+video/3gpp              3gp,3gpp
+video/3gpp2             3g2,3gp2,3gpp2
+video/divx              divx,div,mkv
+video/flv               flv
+video/mj2               mj2,mjp2
+video/mp4               mp4,mpg4
+video/mpeg              mpeg,mpg,m1s,m1v,m1a,m75,m15,mp2,mpm,mpv,mpa,mpe,mpv2
+video/mpeg-system 	mpg,mpeg,vob
+video/ogg               ogv,oggv
+video/quicktime         qt,mov,mqv
+video/sd-video          sdv
+video/webm              webm
+video/x-sgi-movie       movie
+video/x-msvideo         avi
+video/x-la-asf          lsf,lsx
+video/x-ms-asf          asf,asr,asx
+video/x-ms-wm           wm
+video/x-ms-wmv          wmv
+video/x-ms-wvx          wvx
+video/x-m4v             m4v
+video/x-mpeg            mpeg,mpg,m1s,m1v,m1a,m75,m15,mp2,mpm,mpv,mpa,mpe,mpv2
+video/x-mpeg-system 	mpg,mpeg,vob
+video/x-msvideo 	avi
+video/x-ms-asf-plugin 	asf,asx
+video/x-ms-asf          asf,asx
+video/x-flv             flv
+video/x-matroska 	mkv
+video/x-mov             mov
+
+
+##############################################################################
+#   Plugins : This section specifies a map of mimetypes supported by the media plugins.
+#   Plugin version specific mime-types are specified with lowest media plugin version 
+#   with media format support as:
+#       plugin.&lt;PluginName&gt;.&lt;majorVersionNumber&gt;_&lt;minorVersionNumber&gt;_&lt;revisionNumber&gt;
+#
+#   NB: NativePlayer tests all mime-types on browser and use all supported types
+##############################################################################
+plugin.DivXPlayer               video/divx
+plugin.DivXPlayer.2_1_0         video/mp4,video/x-mov
+plugin.FlashPlayer      audio/x-m4a,audio/mpeg,audio/x-mpegurl,video/flv,video/x-flv,video/mp4
+plugin.QuickTimePlayer  audio/wav,audio/mid,audio/basic,audio/x-aiff,audio/ac3,audio/aac, \
+                        audio/amr,audio/x-gsm,audio/3gpp,audio/3gpp2,audio/x-mpegurl, \
+                        audio/mpeg,audio/mp4,video/mpeg,video/mp4,video/quicktime, \
+                        audio/x-m4a,audio/x-m4b,audio/x-m4p,video/sd-video,audio/x-caf
+plugin.VLCPlayer        audio/mpeg,video/mpeg,video/mpeg-system,video/mp4,video/x-msvideo, \
+                        video/quicktime,video/x-ms-asf-plugin,video/x-ms-asf,video/x-ms-wmv, \
+                        audio/wav,audio/3gpp,video/3gpp,audio/3gpp2,video/3gpp2,video/divx, \
+                        video/flv,video/x-matroska,audio/x-matroska,audio/x-m4a, \
+                        audio/x-mpegurl,audio/x-ms-wma
+plugin.WinMediaPlayer           video/x-ms-asf-plugin,video/x-ms-asf,video/x-ms-wm, \
+                                audio/x-ms-wma,audio/x-ms-wax,video/x-ms-wmv,video/x-ms-wvx
+plugin.WinMediaPlayer.12_0_0    video/mp4
+
+##############################################################################
+#  Default file protocols that can be handled by supported media plugins
+#
+#  NB: http/https protocols are applied by default
+##############################################################################
+protocols.DivXPlayer
+protocols.FlashPlayer         rtmp
+protocols.QuickTimePlayer     rtsp,rts
+protocols.VLCPlayer           rtp,rtsp,mms,udp
+protocols.WinMediaPlayer      rtsp,rtspu,rtspt,mms,mmsu,mmst,wmpcd,wmpdvd</source>
+
+                <p>
+                The mime-types section lists all supported mime-types and their registered file
+                extensions as listed in the <a href='http://www.iana.org/assignments/media-types'>
+                    IANA registry</a>.
+                </p>
+
+                <p>
+                The plugin section lists the mime-types supported by the player widgets.  Media URLs
+                ending with the file extensions of the specifed mime-types are considered playable by the
+                associated widgets.
+                </p>
+
+                <div style="margin: 5px 3em;padding:0.8em;background-color: #ededed;border:1px solid #cccccc">
+                For NativePlayer widget (HTML 5 media player), all mime-types are tested for
+                compatibility on the browser and populated accordingly.
+                </div>
+                <p>
+                The protocols section lists all known media protocols supported by the player widgets.
+                Media URLs starting with these protocols are considered playable by the widgets.
+                </p>
+            </subsection>
+
+            <subsection name="How does it work ?">
+                <p>Assuming we have a <a href='custom-player.html'>customised player control</a>
+                so designed to our taste and we need to playback a Quicktime video.  We may also wish
+                to make the events generated by the player control some other actions on the application.
+                </p>
+
+                <p>In this case we have the option of using either of the player widgets that supports
+                Quicktime videos - <code>QuickTimePlayer</code> or <code>VLCPlayer</code>.  If we use
+                one of the widgets and the browser on the client only have a plugin for the other widget
+                installed, then our application is broken!
+                </p>
+
+                <p>A better option is to get the
+                <a href='getting-started.html#Select_a_suitable_player_dynamically'>
+                    player dynamically</a> - that is where the mime-type/extension mapping comes in.
+                    With this, all plugins available on the client are checked and
+                    either of <code>QuickTimePlayer</code> and <code>VLCPlayer</code> widgets selected
+                    since the media URL ends in an extension associated with both.  With either player,
+                    the user is unaware since the UI controls is the same and all other actions
+                    are controlled in a similar way.
+                </p>
+            </subsection>
+
+            <subsection name="Customizing the mime-type mapping">
+                <p>There may be need to use a different mime-type file when:</p>
+                <ul>
+                    <li>new mime-types are defined</li>
+                    <li>or some mime-types are missing :-)</li>
+                    <li>or your application will be using only few mime-types</li>
+                </ul>
+
+                <p>The API defines a configuration property <code>bstplayer.media.mimeTypes</code>
+                that can be used to override the default mime-type file.
+                </p>
+
+                <p>Customizing requires only two steps:</p>
+                <ol>
+                    <li>define the property file containing the mime-types in the 
+                    <a href='Default_Mime_Mapping'>format</a> shown above</li>
+                    <li>add the following line to your GWT module XML file</li>
+                </ol>
+
+                <source>
+&lt;set-configuration-property name="bstplayer.media.mimeTypes"
+         value="/com/example/package/foo/some-custom-types.properties" /&gt;</source>
+
+                <p>During compilation, the new mime-type file replaces the default.</p>
+
+                <div style="margin: 5px 3em;padding:0.8em;background-color: #ededed;border:1px solid #cccccc">
+                If some mime-types are missing or new mime-types are defined for the player widgets,
+                be kind to <a href='http://code.google.com/p/bst-player/issues/'>open an issue</a>
+                to update the default mime mapping file.
+                </div>
+            </subsection>
+        </section>
+    </body>
+</document>

@@ -1,0 +1,58 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field="x" type="com.bramosystems.oss.player.showcase.client.res.Bundle"/>
+    <ui:style>
+        .panel {
+            line-height: 2;
+        }
+        .padding5 {
+            padding: 1px 5px;
+            margin-bottom: 3px;
+       }
+        .title {
+            border-top: 1px solid #cccccc;
+            font-size: 90%;
+            font-weight: bold;
+        }
+    </ui:style>
+    <g:HTMLPanel>
+        <div class='{style.title} {style.padding5}'>Core plugin options</div>
+        <g:FlowPanel styleName='{style.panel} {style.padding5}'>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='auto'>
+            Auto-select
+            </g:RadioButton>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='html5'>
+            HTML5
+                <code>&lt;video&gt;</code>
+            </g:RadioButton>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='flash'>
+            Adobe&#174; Flash&#174; Player plugin
+            </g:RadioButton>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='wmp'>
+            Windows Media Player plugin
+            </g:RadioButton>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='vlc'>
+            VLC Multimedia Plug-in
+            </g:RadioButton>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='qt'>
+            QuickTime Player plugin
+            </g:RadioButton>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='divx'>
+            DivX&#174; Web Player plugin
+            </g:RadioButton>
+        </g:FlowPanel>
+        <div class='{style.title} {style.padding5}'>YouTube options</div>
+        <g:FlowPanel styleName='{style.panel} {style.padding5}'>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='uTube'>
+            YouTube Player widget
+            </g:RadioButton>
+            <g:RadioButton name='plugin' styleName='{x.css.pluginOption}' ui:field='uChrome'>
+            YouTube Chromeless Player
+            </g:RadioButton>
+        </g:FlowPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

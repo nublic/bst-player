@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.bramosystems.oss.player</groupId>
+    <artifactId>bst-player</artifactId>
+    <packaging>pom</packaging>
+    <version>1.4-SNAPSHOT</version>
+    <name>BST Player</name>
+    <url>http://oss.bramosystems.com/bst-player</url>
+    <inceptionYear>2009</inceptionYear>
+    <description>
+        Provides a consistent API to embed popular web media player plugins (such as Windows Media Player,
+        QuickTime player, Flash player, VLC Media Player, DivX Web Player etc) in GWT applications
+    </description>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>sbraheem</id>
+            <name>Sikiru Braheem</name>
+            <email>sbraheem@bramosystems.com</email>
+        </developer>
+        <developer>
+            <id>sselikoff</id>
+            <name>Scott Selikoff</name>
+        </developer>
+        <developer>
+            <id>berger.max</id>
+            <name>Berger Max</name>
+        </developer>
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Brett Wooldridge</name>
+        </contributor>
+        <contributor>
+            <name>Matthew Gressek</name>
+        </contributor>
+    </contributors>
+
+    <scm>
+        <connection>scm:svn:http://bst-player.googlecode.com/svn/tags/version-130</connection>
+        <developerConnection>scm:svn:https://bst-player.googlecode.com/svn/tags/version-130</developerConnection>
+        <url>http://code.google.com/p/bst-player/source/browse/tags/version-130</url>
+    </scm>
+
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/bst-player/issues/list</url>
+    </issueManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>Google Groups</name>
+            <subscribe>Subscribe</subscribe>
+            <unsubscribe>Unsubscribe</unsubscribe>
+            <post>bst-player@googlegroups.com</post>
+            <archive>http://groups.google.com/group/bst-player</archive>
+        </mailingList>
+    </mailingLists>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.3.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.3.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.7</version>
+                    <configuration>
+                        <excludePackageNames>*.impl;*.dev.*;*.video;*.rebind</excludePackageNames>
+                        <doctitle>${project.name} ${project.version}</doctitle>
+                        <windowtitle>${project.name} ${project.version}</windowtitle>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>gwt-maven-plugin</artifactId>
+                    <version>${gwtMojoPluginVersion}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.google.gwt</groupId>
+                            <artifactId>gwt-dev</artifactId>
+                            <version>${gwtVersion}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.google.gwt</groupId>
+                            <artifactId>gwt-user</artifactId>
+                            <version>${gwtVersion}</version>
+                        </dependency>
+                    </dependencies>                    
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>1.0-beta-6</version>
+            </extension>
+        </extensions>
+    </build>
+
+    <properties>
+        <gwtMojoPluginVersion>2.2.0</gwtMojoPluginVersion>
+        <gwtVersion>2.2.0</gwtVersion>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.1</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-user</artifactId>
+                <version>${gwtVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-dev</artifactId>
+                <version>${gwtVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>bst-flash-player</module>
+        <module>bst-player-api</module>
+        <module>bst-player-js</module>
+        <module>bst-player-showcase</module>
+    </modules>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.2</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                            <report>dependencies</report>
+                            <report>issue-tracking</report>
+                            <report>license</report>
+                            <report>mailing-list</report>
+                            <report>project-team</report>
+                            <report>scm</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <distributionManagement>
+        <repository>
+            <id>maven_bramosystems.com</id>
+            <url>ftp://ftp.bramosystems.com/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven_bramosystems.com</id>
+            <url>ftp://ftp.bramosystems.com/snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>dev-mode</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>m3-build</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-site-plugin</artifactId>
+                            <version>3.0-beta-3</version>
+                            <configuration>
+                                <reportPlugins>
+                                    <plugin>
+                                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                                        <version>2.2</version>
+                                        <reports>
+                                            <report>index</report>
+                                            <report>dependencies</report>
+                                            <report>issue-tracking</report>
+                                            <report>license</report>
+                                            <report>mailing-list</report>
+                                            <report>project-team</report>
+                                            <report>scm</report>
+                                            <report>summary</report>
+                                        </reports>
+                                    </plugin>
+                                    <plugin>
+                                        <artifactId>maven-javadoc-plugin</artifactId>
+                                        <reports>
+                                            <report>javadoc</report>
+                                        </reports>
+                                    </plugin>
+                                </reportPlugins>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>oss-lab-site</id>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <configuration>
+                            <siteDirectory>src/site/osslab</siteDirectory>
+                            <xdocDirectory>src/site/xdoc</xdocDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+        <profile>
+            <id>oss-lab-site-m3</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <version>3.0-beta-3</version>
+                        <configuration>
+                            <siteDirectory>src/site/osslab</siteDirectory>
+                            <xdocDirectory>src/site/xdoc</xdocDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

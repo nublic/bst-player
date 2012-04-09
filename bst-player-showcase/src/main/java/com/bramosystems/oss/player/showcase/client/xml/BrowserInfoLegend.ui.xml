@@ -1,0 +1,28 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field="y" type="com.bramosystems.oss.player.showcase.client.res.Bundle"/>
+    <ui:style field='x'>
+        .legend {
+            width: auto;
+            float: none;
+        }
+        .panel {
+            margin-top: 10px;
+        }
+        .title {
+            font-size: 90%;
+            font-weight: bold;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName='{x.panel}'>
+        <div class='{x.title}'>Legend</div>
+        <div class='{y.css.yes} {x.legend}'>Required player plug-in available</div>
+        <div class='{y.css.no} {x.legend}'>Required player plug-in not available</div>
+        <div class='{y.css.error} {x.legend}'>Installed player plug-in version not supported</div>
+    </g:HTMLPanel>
+</ui:UiBinder>

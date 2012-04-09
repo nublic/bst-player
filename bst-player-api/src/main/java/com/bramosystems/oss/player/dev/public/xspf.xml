@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf8"?>
+
+<playlist xmlns='http://xspf.org/ns/0' version='1'>
+    <title>XSPF Playlist Example</title>
+    <creator>Sikiru Braheem</creator>
+    <annotation>Sample playlist created for BST Player API</annotation>
+    <info>http://oss.bramosystems.com/bst-player</info>
+    <location>http://oss.bramosystems.com/bst-player/demo/showcase</location>
+    <identifier>sample_xspf_playlist</identifier>
+    <image>http://www.bramosystems.com/favicon.ico</image>
+    <date>2011-03-04</date>
+    <license>http://www.apache.org/licenses/LICENSE-2.0.txt</license>
+    <attribution>
+        <location>http://example.com</location>
+        <identifier>http://example.com</identifier>
+    </attribution>
+    <link rel="url of resource type">(0 or more) url of resource</link>
+    <meta rel="url of resource type of meta">(0/more) value of meta</meta>
+    
+    <trackList>
+        <track>
+            <location>applause.mp3</location>
+            <identifier>idx1</identifier>
+            <title>Applause</title>
+            <creator>Unknow</creator>
+            <annotation>Just an applause</annotation>
+            <album>Sample Playlist</album>
+            <trackNum>1</trackNum>
+            <duration>5000</duration>
+            <link rel="url of resource type">(0 or more) url of resource</link>
+            <meta rel="url of resource type of meta">(0/more) value of meta</meta>
+        </track>
+        <track>
+            <location>big-buck-bunny.mp4</location>
+            <identifier>idx2</identifier>
+            <title>Big Buck Bunny</title>
+            <creator>Unknown</creator>
+            <annotation>Big Buck Bunny Preview</annotation>
+            <image>http://example.com</image>
+            <album>Sample Playlist</album>
+            <trackNum>2</trackNum>
+            <duration>60000</duration>
+            <link rel="url of resource type">(0 or more) url of resource</link>
+            <meta rel="url of resource type of meta">(0/more) value of meta</meta>
+        </track>        
+        <track>
+            <location>traffic.flv</location>
+            <identifier>idx3</identifier>
+            <title>Sunset traffic shot</title>
+            <creator>Sikiru Braheem</creator>
+            <annotation>Sunset traffic</annotation>
+            <image>http://example.com</image>
+            <album>Sample Playlist</album>
+            <trackNum>3</trackNum>
+            <duration>10000</duration>
+            <link rel="url of resource type">(0 or more) url of resource</link>
+            <meta rel="url of resource type of meta">(0/more) value of meta</meta>
+        </track>        
+    </trackList>
+</playlist>

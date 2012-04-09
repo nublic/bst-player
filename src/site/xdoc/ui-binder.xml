@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>UiBinder Support</title>
+    </properties>
+    <head>
+        <meta name="description" content="Instantiate player widgets in GWT UiBinder XML files." />
+    </head>
+    <body>
+        <section name="UiBinder Support">
+
+            <p>
+                As of version 2.0, GWT offers the
+                <a href='http://code.google.com/webtoolkit/doc/latest/DevGuideUiBinder.html'>UiBinder
+                framework
+                </a> - a declarative means of composing application UI widgets with XML files
+                in a manner similar to developing HTML pages.
+            </p>
+            <p>
+                The following sections describe the ways of using the player widgets with UiBinder
+            </p>
+
+            <subsection name="The required module">
+                <p>
+                For this description to work, your application should inherit the
+                    <i>com.bramosystems.oss.player.uibinder.UiBinder</i> module.  This is as simple as
+                putting the following line in your module XML file:
+                </p>
+                <source>
+&lt;inherits name="com.bramosystems.oss.player.uibinder.UiBinder"/&gt;
+                </source>
+                <p style="color: #ff6600">
+                    However, it should be obvious, the module requires GWT 2.0 or later.
+                </p>
+            </subsection>
+
+            <subsection name="The widgets namespace">
+                <p>
+                    The player widgets with UiBinder support are placed in the
+                    <code>com.bramosystems.oss.player.uibinder.client</code> package.  Consequently,
+                    in order to use the player widgets in a ui.xml template file, you need to tie
+                    the package to an XML namespace prefix.
+                </p>
+
+                <source>
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client'&gt;
+    ...
+&lt;/ui:uibinder&gt;
+                </source>
+            </subsection>
+
+            <subsection name="The supported players">
+                <p>
+                    The following widgets are the supported:
+                </p>
+                <table>
+                    <tr>
+                        <th>Instance name</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>WinMediaPlayer</td>
+                        <td>Embeds Windows Media Player plugin</td>
+                    </tr>
+                    <tr>
+                        <td>QuickTimePlayer</td>
+                        <td>Embeds QuickTime plugin</td>
+                    </tr>
+                    <tr>
+                        <td>Flash</td>
+                        <td>Embeds a generic Adobe Flash application</td>
+                    </tr>
+                    <tr>
+                        <td>FlashMediaPlayer</td>
+                        <td>Embeds Adobe Flash plugin for playing Flash supported file formats</td>
+                    </tr>
+                    <tr>
+                        <td>VLCPlayer</td>
+                        <td>Embeds VLC Media Player plugin</td>
+                    </tr>
+                    <tr>
+                        <td>Native</td>
+                        <td>Embeds media with HTML 5 video handler in supported browsers</td>
+                    </tr>
+                    <tr>
+                        <td>DivXPlayer</td>
+                        <td>Embeds DivX&#174; Web Player plugin</td>
+                    </tr>
+                    <tr>
+                        <td>YouTube</td>
+                        <td>Embeds YouTube video</td>
+                    </tr>
+                    <tr>
+                        <td>Chromeless</td>
+                        <td>Embeds YouTube video using the Chromeless player</td>
+                    </tr>
+                    <tr>
+                        <td>Auto</td>
+                        <td>Embeds media using any of the avaliable media plugins on the client</td>
+                    </tr>
+                    <tr>
+                        <td>PlaylistSupport</td>
+                        <td>Embeds media using any available media plugin that supports client side playlist
+                        management
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MatrixSupport</td>
+                        <td>Embeds media using any available media plugin that supports matrix transformation</td>
+                    </tr>
+                </table>
+                
+                <p style="background-color:#ffffcc;border:1px solid red;padding:0.4em">
+                    Note: For BST Player 1.2.1 and earlier, the use of 
+                    <code>YouTube</code> and 
+                    <code>Chromeless</code> widgets 
+                    require the 
+                    <code>com.bramosystems.oss.player.uibinder.client.youtube</code> XML namespace. 
+                </p>
+            </subsection>
+
+            <subsection name="Enhanced UiBinder support">
+                <p>
+                    As of BST Player 1.3, all the widgets specified in the previous section (except 
+                    <code>Flash</code>) have been
+                    deprecated in favour of the new 
+                    <code>Player</code> widget. The widget wraps all players available to the API 
+                    (includng any provided by third parties) out-of-the-box.
+                </p>
+            </subsection>
+
+            <subsection name="The supported attributes">
+                <p>
+                    Each of the widgets support the following attributes (except stated otherwise)
+                </p>
+                <table>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Required</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Comment</th>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>true</td>
+                        <td>String</td>
+                        <td>-</td>
+                        <td>The name of the player, in the format "<code>&lt;playerProviderName&gt;:&lt;playerName&gt;</code>"
+                            <br/>
+                            <b>Note: Supported only by the 
+                                <code>Player</code> widget (BST Player API 1.3 and later)
+                            </b>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>mediaURL</td>
+                        <td>true</td>
+                        <td>String</td>
+                        <td>-</td>
+                        <td>The URL of the media.
+                            <br/>Note: The 
+                            <code>YouTube</code> widget uses 
+                            <code>videoURL</code> instead
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>height</td>
+                        <td>true</td>
+                        <td>String</td>
+                        <td>-</td>
+                        <td>The height of the widget (CSS units)</td>
+                    </tr>
+                    <tr>
+                        <td>width</td>
+                        <td>true</td>
+                        <td>String</td>
+                        <td>-</td>
+                        <td>The width of the widget (CSS units)</td>
+                    </tr>
+                    <tr>
+                        <td>autoplay</td>
+                        <td>true</td>
+                        <td>boolean</td>
+                        <td>-</td>
+                        <td>If the media should be played automatically.
+                            <br/>Note:
+                            <code>Flash</code> widget does not support this attribute
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>showLogger</td>
+                        <td>false</td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td>If the Logger widget should show
+                            <br/>Note:
+                            <code>Flash</code> widget does not support this attribute
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>resizeToVideoSize</td>
+                        <td>false</td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td>If the player should resize to match the size of the video
+                        (if embedded media is a video file).
+                            <br/>Note:
+                            <code>Flash</code> widget does not support this attribute
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>controllerVisible</td>
+                        <td>false</td>
+                        <td>boolean</td>
+                        <td>true</td>
+                        <td>If the player controls should be visible
+                            <br/>Note:
+                            <code>Flash, YouTube and Chromeless</code> widgets does not support this attribute
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>loopCount</td>
+                        <td>false</td>
+                        <td>int</td>
+                        <td>1</td>
+                        <td>Number of times to repeat playback before stopping
+                            <br/>Note:
+                            <code>Flash, YouTube and Chromeless</code> widgets does not support this attribute
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>params</td>
+                        <td>false</td>
+                        <td>String</td>
+                        <td>-</td>
+                        <td>Supported ONLY by 
+                            <code>Flash</code> widget.  A comma separated list of
+                        name/value pairs of Adobe Flash parameters. E.g. 
+                            <code>params='allowScriptAccess=sameDomain,bgcolor=#000000'</code>
+                            <br/>Note: Do not pass 
+                            <code>flashVars</code> parameter with this attribute,
+                        use the 
+                            <code>flashVars</code> attribute instead.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>flashVars</td>
+                        <td>false</td>
+                        <td>String</td>
+                        <td>-</td>
+                        <td>Supported ONLY by 
+                            <code>Flash</code> widget.  A list of name/value pairs
+                        parameters that is passed to the Flash application. E.g.
+                            <code>flashVars='param1=value1&amp;param2=value2'</code>
+                        </td>
+                    </tr>
+                </table>
+            </subsection>
+
+            <subsection name="Relative URLs">
+                <p>
+                    The player widgets define special URL prefixes to make media files relative to the
+                    application host page accessible. The prefixes are resolved to the fully qualified
+                    names during compilation.
+                </p>
+                <table>
+                    <tr>
+                        <th>Prefix</th>
+                        <th>Fully Qualified Name</th>
+                    </tr>
+                    <tr>
+                        <td>gwt-host::</td>
+                        <td>The URL of the application's host page as returned by
+                            <code>GWT.getHostPageBaseURL()</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>gwt-module::</td>
+                        <td>The URL of the application's module as returned by
+                            <code>GWT.getModuleBaseURL()</code>
+                        </td>
+                    </tr>
+                </table>
+            </subsection>
+
+            <subsection name="Example Usage">
+                <p>
+                    The examples below illustrates how to embed player widgets (BST Player 1.2.1 and earlier)
+                </p>
+                <source>
+Embed media with Windows Media Player plugin
+
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client'&gt;
+        ...
+        &lt;player:WinMediaPlayer autoplay='true' height='50px' width='100%'
+            mediaURL='gwt-host::media/applause.mp3' /&gt;
+        ...
+&lt;/ui:UiBinder&gt;
+
+Embed MP3 media with the HTML 5 video elements with the logger showing
+
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client'&gt;
+        ...
+        &lt;player:Native autoplay='true' height='20px' width='100%'
+            showLogger='true' mediaURL='gwt-host::media/o-na-som.mp3' /&gt;
+        ...
+&lt;/ui:UiBinder&gt;
+
+Embed YouTube video with the YouTube widget
+
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client.youtube'&gt;
+        ...
+        &lt;player:YouTube height='350px' width='100%' showLogger='true'
+                    videoURL='http://www.youtube.com/v/QbwZL-EK6CY' /&gt;
+        ...
+&lt;/ui:UiBinder&gt;
+                </source>
+
+                <p>
+                    The following examples illustrates the previous with BST Player 1.3 or later:
+                </p>
+                <source>
+Embed media with Windows Media Player plugin
+
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client'&gt;
+        ...
+        &lt;player:Player name='core:WinMediaPlayer' autoplay='true' height='50px' width='100%'
+            mediaURL='gwt-host::media/applause.mp3' &gt;
+                &lt;player:missingPluginNotice&gt;
+                    &lt;!-- 
+                        Replace the default missing plugin notice with a custom GWT
+                        widget of choice                        
+                    --&gt;
+                    &lt;g:Label styleName='mystyles'&gt;Oopss, you do not have the required plugin !
+                    Download 'ThePlugin' &lt;/g:Label&gt;
+                &lt;/player:missingPluginNotice&gt;
+                &lt;player:missingPluginVersionNotice&gt;
+                    &lt;!--
+                        A custom GWT widget can also be used instead of the default
+                        missing plugin version notice                        
+                    --&gt;
+                    &lt;g:Label&gt;Oopss, you actually need a higher version of 'ThePlugin' 
+                    to see this media !&lt;/g:Label&gt;
+                &lt;/player:missingPluginVersionNotice&gt;
+        &lt;/player:Player&gt;
+        ...
+&lt;/ui:UiBinder&gt;
+
+Embed MP3 media with the HTML 5 video elements with the logger showing
+
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client'&gt;
+        ...
+        &lt;player:Native autoplay='true' height='20px' width='100%'
+            showLogger='true' mediaURL='gwt-host::media/o-na-som.mp3' /&gt;
+        ...
+&lt;/ui:UiBinder&gt;
+
+Embed YouTube video with the YouTube widget
+
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client'&gt;
+        ...
+        &lt;player:Player name='yt:YouTube' height='350px' width='100%' showLogger='true'
+                    mediaURL='http://www.youtube.com/v/QbwZL-EK6CY' /&gt;
+        ...
+&lt;/ui:UiBinder&gt;
+                </source>
+            </subsection>
+
+            <subsection name="Programmatic Access">
+                <p>
+                    UiBinder offers owner classes programmatic access to widgets defined in UI templates.
+                    The player can be injected into the owner class with the 
+                    <code>ui:field</code> attribute.
+                </p>
+                <p>
+                    With UiBinder, the player widgets only support the methods defined in the
+                    <a href="bst-player-api/apidocs/com/bramosystems/oss/player/core/client/AbstractMediaPlayer.html">
+                        AbstractMediaPlayer
+                    </a> class and the
+                    <a href="bst-player/bst-player-api/apidocs/com/bramosystems/oss/player/core/client/PlaylistSupport.html">
+                            PlaylistSupport
+                    </a>/
+                    <a href="bst-player/bst-player-api/apidocs/com/bramosystems/oss/player/core/client/geom/MatrixSupport.html">
+                                MatrixSupport
+                    </a> interfaces.
+                                
+                    However, you can access player specific methods by calling 
+                    <code>player.getEngine()</code>.
+                    The following example demonstrates this:
+                </p>
+                <source>
+&lt;!-- WMPExample.ui.xml --&gt;
+&lt;ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:player='urn:import:com.bramosystems.oss.player.uibinder.client'&gt;
+
+    &lt;g:VerticalPanel spacing='10'&gt;        
+        ...
+        &lt;!-- pre BST Player 1.3 --&gt;
+        &lt;player:WinMediaPlayer autoplay='true' height='50px' width='100%'
+            mediaURL='gwt-host::media/applause.mp3' ui:field='player' /&gt;
+        ...
+        &lt;!-- for BST Player 1.3+ --&gt;        
+        &lt;player:Player name="core:WinMediaPlayer" autoplay='true' height='50px' width='100%'
+            mediaURL='gwt-host::media/applause.mp3' ui:field='player' /&gt;
+        ...    
+    &lt;/g:VerticalPanel&gt;
+&lt;/ui:UiBinder&gt;
+
+
+&lt;!-- WMPExample.java --&gt;
+public class WMPExample extends Composite {
+  interface WMPBinder extends UiBinder&lt;VerticalPanel, WMPExample&gt; {}
+
+  private static WMPBinder _binder = GWT.create(WMPBinder.class);
+  
+  // UiBinder injects the created instance...
+//  @UiField WinMediaPlayer player;   pre BST Player 1.3
+  @UiField Player player;   // for BST Player 1.3+...
+
+  public WMPExample() {
+    initWidget(_binder.createAndBindUi(this));
+
+    // access general methods directly
+    player.addPlayerStateHandler( ... );
+
+    // access WinMediaPlayer specific methods...
+    ((WinMediaPlayer)player.getEngine()).setUIMode(UIMode.MINI);
+  }
+}
+                </source>
+            </subsection>
+
+        </section>
+    </body>
+</document>

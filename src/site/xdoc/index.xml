@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>Overview</title>
+    </properties>
+    
+    <head>
+        <meta name="description" content="BST Player provides a consistent API to add
+        Windows Media Player, QuickTime, VLC Media Player, DivX Web Player, Flash plugins and HTML 5 video
+        to GWT applications. It also feature a module to embed YouTube videos and classes to
+        facilitate custom player controls" />
+    </head>
+    <body>
+        <section name="Overview">
+            <div id="ohloh">
+                <script type="text/javascript"
+                src="http://www.ohloh.net/p/315620/widgets/project_thin_badge.js">
+                </script>
+            </div>
+            <p>
+                The API makes Windows Media Player, QuickTime player, Adobe &#174; Flash&#174; player, VLC Media Player,
+                DivX&#174; Web Player plugins, HTML 5 video elements and YouTube videos available in
+                GWT applications like other GWT widgets.
+            </p>
+            <p>
+                The API feature sets of classes and interfaces that presents a consistent means of
+                interacting with the supported player plugins.  Knowing how to use one
+                player widget means you are well at home with other player widgets.
+            </p>
+            <p>
+                Each player widget exposes methods to load media files, initiate playback,
+                pause, stop, change playback position and volume.  General media plugin events
+                such as loading progress, playback started, playback finished, IO errors are also
+                supported via event handlers
+            </p>
+            <p>
+                The API also feature plugin detection, which is central to the smooth operation of
+                the library as well as classes to facilitate the development of custom HTML-based player
+                controls (skins).  The custom players can be used like a cross-browser media
+                player in GWT applications. Exceptions are thrown in the absence of a required plugin,
+                hence allowing you to display an alternative message (or widget).
+            </p>
+            <p>
+                Read the <a href="getting-started.html">Getting Started</a> guide for the general
+                usage of the API.
+            </p>
+
+            <subsection name="Demo">
+                <p>
+                    The
+                    <a href="demo/showcase/index.html">BST Player Showcase</a> application showcase
+                    the various features of the API.
+                </p>
+            </subsection>
+
+            <subsection name="Questions">
+                <p>
+                    Post all questions on the
+                    <a href="http://groups.google.com/group/bst-player">bst-player</a>
+                    group, hopefully someone will try to provide answers as best as possible.
+                </p>
+            </subsection>
+
+            <subsection name="Suggestions and Issues">
+                <p>
+                    Suggestions and feedbacks are always welcome as regards improving the project.
+                    You may post your suggestions and all issues on the
+                    <a href="http://code.google.com/p/bst-player/issues/">Issues page</a>.
+                </p>
+                <p>Happy coding ...</p>
+            </subsection>
+        </section>
+    </body>
+</document>

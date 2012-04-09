@@ -1,0 +1,105 @@
+<!doctype html>
+
+<!--
+ Copyright 2010 Sikiru.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ under the License.
+
+-->
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <script type="text/javascript">
+            var bstplayer = new Object();
+            bstplayer.handlers = new Object();
+            bstplayer.handlers.swf = new Object();
+            bstplayer.handlers.swf.gwtuid1 = new Object();
+            bstplayer.handlers.swf.gwtuid1.onMessage = function(type, message) {
+                document.getElementById("trace1").innerHTML += type + " - " + message + "<br/>";
+            }
+           bstplayer.handlers.swf.gwtuid1.onStateChanged = function(state, index) {
+ //               document.getElementById("trace1").innerHTML += "state: " + state + " - " + index + "<br/>";
+            }
+            bstplayer.handlers.swf.gwtuid2 = new Object();
+            bstplayer.handlers.swf.gwtuid2.onMessage = function(type, message) {
+                document.getElementById("trace2").innerHTML += type + " - " + message + "<br/>";
+            }
+            bstplayer.handlers.swf.gwtuid1.onInit = function() {
+                document.getElementById("trace1").innerHTML += "--- Initz --- <br/>";
+ //                               pl.setRepeatMode('all');
+ //                               pl.setLoopCount(2);
+                //                pl.setShuffleEnabled(true);
+//                pl.setControllerVisible(true);
+                //                pl.setAutoHideController(true);
+                //                   flashvars="playerId=gwtuid1&autoplay=false&mediaURL=file:///C:/SPEC/projects/oss/bst-player/bst-flash-player/traffic.flv"
+            }
+            bstplayer.handlers.swf.gwtuid1.onPlayingProgress = function(prog) {
+  //              document.getElementById("progDiv").innerHTML = ': ' + prog/1000;
+            }
+            // C:\Users\User\Documents\Sikiru\Lib\Apps\OSSProjects\bst-player-r120\bst-player-showcase\target\bst-player-showcase\media
+            //  flashvars="playerId=gwtuid2&autoplay=false&mediaURL=file:///C:/SPEC/projects/oss/bst-player/bst-flash-player/traffic.flv"
+            // flashvars="playerId=gwtuid2&autoplay=false&mediaURL=file:///C:/Users/User/Documents/Sikiru/Lib/Apps/OSSProjects/bst-player-r120/bst-player-showcase/target/bst-player-showcase/media/traffic.flv
+        
+            function doplay() {
+                window.alert("do play ...");
+                document.getElementById("gwtuid1").play();
+                document.getElementById("gwtuid1").addToPlaylist('http://192.168.20.68:8080/traffic_1.flv');
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+        <button type="button"
+                onclick="document.getElementById('gwtuid1').play().setControllerVisible(!gwtuid1.isControllerVisible())">Toggle Controller</button>
+        <button type="button"
+                onclick="doplay()">Play</button>
+        </div>
+        <div style="width: 42%; float: left">
+            <object id="gwtuid1" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" style="width: 100%; height: 400px" >
+                <param name="src" value="target/bst-flash-player-1.3-SNAPSHOT.swf"/>
+                <param name="flashvars" value="playerId=gwtuid1&autoplay=false&mediaURL=http://localhost:8080/u2intro.mp4">
+                <!--param name="allowScriptAccess" value="always"-->
+                <param name="allowNetworking" value="all">
+                <param name="allowfullscreen" value="true">                
+                <param name="wmode" value="opaque">                
+
+            <embed id="gwtuid1"  type="application/x-shockwave-flash"
+                   src="target/bst-flash-player-1.3-SNAPSHOT.swf"  name="gwtuid1"
+                   flashvars="playerId=gwtuid1&autoplay=false&mediaURL=http://localhost:8080/u2intro.mp4"
+                   allowscriptaccess="always" allowfullscreen="true" style="width: 100%; height: 400px" wmode="opaque"/>
+            </object> 
+            <div id="trace1" style="margin-top: 5px; font-size: 12px;overflow: scroll;height: 150px"></div>
+        </div>
+
+
+        <div style="width: 42%; float: right">
+            <object id="gwtuid2" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" style="width: 100%; height: 400px" >
+                <param name="src" value="target/bst-flash-player-1.3-SNAPSHOT-lo.swf">
+                <param name="flashvars" value="playerId=gwtuid2&autoplay=false&mediaURL=file://E:/Lib/Apps/OSSProjects/bst-player/bst-flash-player/u2intro.mp4">
+                <param name="allowNetworking" value="all">
+                <param name="allowfullscreen" value="true">                
+                <param name="wmode" value="opaque">                
+
+            <embed id="gwtuid2"  type="application/x-shockwave-flash"
+                   src="target/bst-flash-player-1.3-SNAPSHOT-lo.swf"  name="gwtuid2"
+                   flashvars="playerId=gwtuid2&autoplay=false&mediaURL=file://E:/Lib/Apps/OSSProjects/bst-player/bst-flash-player/u2intro.mp4"
+                   allowscriptaccess="always" allowfullscreen="true" style="width: 100%; height: 400px" wmode="opaque"/>
+            </object>
+            <div id="trace2" style="margin-top: 5px; font-size: 12px;overflow: scroll;height: 150px"></div>
+        </div>
+<!--
+-->
+    </body>
+</html>

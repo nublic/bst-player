@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--                                                                        -->
+<!-- Copyright 2009 Sikirulai Braheem                                       -->
+<!-- Licensed under the Apache License, Version 2.0 (the "License"); you    -->
+<!-- may not use this file except in compliance with the License. You may   -->
+<!-- may obtain a copy of the License at                                    -->
+<!--                                                                        -->
+<!-- http://www.apache.org/licenses/LICENSE-2.0                             -->
+<!--                                                                        -->
+<!-- Unless required by applicable law or agreed to in writing, software    -->
+<!-- distributed under the License is distributed on an "AS IS" BASIS,      -->
+<!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or        -->
+<!-- implied. License for the specific language governing permissions and   -->
+<!-- limitations under the License.                                         -->
+<!--                                                                        -->
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.6.4//EN"
+"http://google-web-toolkit.googlecode.com/svn/tags/1.6.4/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.google.gwt.http.HTTP"/>
+    <inherits name="com.bramosystems.oss.player.core.event.Event" />
+    <inherits name="com.bramosystems.oss.player.util.Util" />
+    <stylesheet src="custom-control-styles.css" />
+
+    <!-- define configuration properties -->
+    <define-property name="bstplayer.enableLogger" values="true, false"/>
+    <define-configuration-property name="bstplayer.media.mimeTypes" is-multi-valued="false" />
+
+	<!-- WMPStateManager mapping for IE6/7/8 -->
+    <replace-with class="com.bramosystems.oss.player.core.client.impl.WMPStateManagerIE">
+        <when-type-is class="com.bramosystems.oss.player.core.client.impl.WMPStateManager"/>
+        <any>
+            <when-property-is name="user.agent" value="ie6"/>
+            <when-property-is name="user.agent" value="ie8"/>
+            <when-property-is name="user.agent" value="ie9"/>
+        </any>
+    </replace-with>
+
+    <!--replace-with class="com.bramosystems.oss.player.core.client.impl.WMPStateManagerWebkit">
+        <when-type-is class="com.bramosystems.oss.player.core.client.impl.WMPStateManager"/>
+        <any>
+            <when-property-is name="user.agent" value="safari" />
+            <-when-property-is name="user.agent" value="opera" /->
+        </any>
+    </replace-with-->
+
+    <!-- QTStateManager mapping for IE6/7/8 -->
+    <replace-with class="com.bramosystems.oss.player.core.client.impl.QTStateManagerIE">
+        <when-type-is class="com.bramosystems.oss.player.core.client.impl.QTStateManager"/>
+        <any>
+            <when-property-is name="user.agent" value="ie6"/>
+            <when-property-is name="user.agent" value="ie8"/>
+            <when-property-is name="user.agent" value="ie9"/>
+        </any>
+    </replace-with>
+
+    <!-- VLCStateManager mapping for IE6/7/8 -->
+    <!-- Disable mapping until VLC has proper events support -->
+    <!--
+    <replace-with class="com.bramosystems.oss.player.core.client.impl.VLCStateManagerIE">
+        <when-type-is class="com.bramosystems.oss.player.core.client.impl.VLCStateManager"/>
+        <any>
+            <when-property-is name="user.agent" value="ie6"/>
+            <when-property-is name="user.agent" value="ie8"/>
+        </any>
+    </replace-with>
+    -->
+
+    <!-- PluginManagerImpl mapping for IE6/7/8 -->
+    <replace-with class="com.bramosystems.oss.player.core.client.impl.plugin.PluginManager.PluginManagerImplIE">
+        <when-type-is class="com.bramosystems.oss.player.core.client.impl.plugin.PluginManager.PluginManagerImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="ie6"/>
+            <when-property-is name="user.agent" value="ie8"/>
+            <when-property-is name="user.agent" value="ie9"/>
+        </any>
+    </replace-with>
+
+    <!-- CorePlayerProviderImpl mapping for IE6/7/8 -->
+    <replace-with class="com.bramosystems.oss.player.core.client.impl.CorePlayerProviderIE">
+        <when-type-is class="com.bramosystems.oss.player.core.client.impl.CorePlayerProvider"/>
+        <any>
+            <when-property-is name="user.agent" value="ie6"/>
+            <when-property-is name="user.agent" value="ie9"/>
+            <when-property-is name="user.agent" value="ie8"/>
+        </any>
+    </replace-with>
+
+    <!-- NativePlayerUtil mapping -->
+    <replace-with class="com.bramosystems.oss.player.core.client.impl.NativePlayerUtil.NativePlayerUtilSafari">
+        <when-type-is class="com.bramosystems.oss.player.core.client.impl.NativePlayerUtil"/>
+        <when-property-is name="user.agent" value="safari"/>
+    </replace-with>
+
+    <!-- MimePoolGenerator mapping -->
+    <generate-with class="com.bramosystems.oss.player.core.rebind.MimePoolGenerator" >
+        <when-type-assignable class="com.bramosystems.oss.player.core.client.impl.plugin.MimeParserBase"/>
+    </generate-with>
+
+    <generate-with class="com.bramosystems.oss.player.core.rebind.PlayerManagerGenerator" >
+        <when-type-assignable class="com.bramosystems.oss.player.core.client.impl.plugin.PlayerManager"/>
+    </generate-with>
+
+    <!-- Logger mapping -->
+    <replace-with class="com.bramosystems.oss.player.core.client.ui.Logger.NullLoggerConsoleImpl">
+        <when-type-is class="com.bramosystems.oss.player.core.client.ui.Logger.LoggerConsoleImpl"/>
+        <when-property-is name="bstplayer.enableLogger" value="false"/>
+    </replace-with>
+
+    <!-- Enable Logger by default -->
+    <set-property name="bstplayer.enableLogger" value="true"/>
+</module>
