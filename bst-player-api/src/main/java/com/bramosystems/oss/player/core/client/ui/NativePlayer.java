@@ -591,6 +591,26 @@ public class NativePlayer extends AbstractMediaPlayer implements PlaylistSupport
     public void addToPlaylist(List<MRL> mediaLocators) {
         playlistManager.addToPlaylist(mediaLocators);
     }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+        playlistManager.insertIntoPlaylist(index, mediaURL);
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+        playlistManager.insertIntoPlaylist(index, mediaLocator);
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+        playlistManager.insertIntoPlaylist(index, mediaURLs);
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    	playlistManager.reorderPlaylist(from, to);
+    }
 
     @Override
     public void removeFromPlaylist(int index) {

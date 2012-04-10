@@ -401,6 +401,34 @@ public class Player extends AbstractMediaPlayer
     }
     
     @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+        if ((_engine != null) && (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport)) {
+            ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).insertIntoPlaylist(index, mediaURL);
+        }
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+        if ((_engine != null) && (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport)) {
+            ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).insertIntoPlaylist(index, mediaLocator);
+        }
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+        if ((_engine != null) && (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport)) {
+            ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).insertIntoPlaylist(index, mediaURLs);
+        }
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+        if ((_engine != null) && (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport)) {
+            ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).reorderPlaylist(from, to);
+        }
+    }
+    
+    @Override
     public boolean isShuffleEnabled() {
         if (_engine == null) {
             return false;

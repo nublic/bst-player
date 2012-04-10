@@ -456,6 +456,30 @@ public class ScriptUtil {
         public void addToPlaylist(List<MRL> mediaLocators) {
             // not supported in javascript
         }
+        
+        @Override
+        public void insertIntoPlaylist(int index, String mediaURL) {
+            if ((player != null) && (player instanceof PlaylistSupport)) {
+                ((PlaylistSupport) player).insertIntoPlaylist(index, mediaURL);
+            }
+        }
+
+        @Override
+        public void insertIntoPlaylist(int index, MRL mediaLocator) {
+            // not supported in javascript
+        }
+
+        @Override
+        public void insertIntoPlaylist(int index, String... mediaURLs) {
+            // not supported in javascript
+        }
+        
+        @Override
+        public void reorderPlaylist(int from, int to) {
+        	if ((player != null) && (player instanceof PlaylistSupport)) {
+                ((PlaylistSupport) player).reorderPlaylist(from, to);
+            }
+        }
 
         @Override
         public void removeFromPlaylist(int index) {

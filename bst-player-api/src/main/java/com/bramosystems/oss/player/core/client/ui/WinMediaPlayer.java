@@ -22,7 +22,6 @@ import com.bramosystems.oss.player.core.client.playlist.MRL;
 import com.bramosystems.oss.player.core.client.*;
 import com.bramosystems.oss.player.core.client.MediaInfo.MediaInfoKey;
 import com.bramosystems.oss.player.core.client.impl.*;
-import com.bramosystems.oss.player.core.client.impl.CorePlayerProvider;
 import com.bramosystems.oss.player.core.event.client.*;
 import com.bramosystems.oss.player.core.event.client.PlayerStateEvent.State;
 import com.bramosystems.oss.player.core.client.spi.Player;
@@ -685,6 +684,26 @@ public class WinMediaPlayer extends AbstractMediaPlayer implements PlaylistSuppo
     @Override
     public void addToPlaylist(List<MRL> mediaLocators) {
         playlistManager.addToPlaylist(mediaLocators);
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+        playlistManager.insertIntoPlaylist(index, mediaURL);
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+        playlistManager.insertIntoPlaylist(index, mediaLocator);
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+        playlistManager.insertIntoPlaylist(index, mediaURLs);
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    	playlistManager.reorderPlaylist(from, to);
     }
 
     @Override

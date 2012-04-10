@@ -310,7 +310,7 @@ public abstract class PlayerWrapper<T extends AbstractMediaPlayer> extends Abstr
     }
 
     @Override
-    public <T extends ConfigValue> void setConfigParameter(ConfigParameter param, T value) {
+    public <CV extends ConfigValue> void setConfigParameter(ConfigParameter param, CV value) {
         if (_engine != null) {
             _engine.setConfigParameter(param, value);
         }
@@ -355,6 +355,34 @@ public abstract class PlayerWrapper<T extends AbstractMediaPlayer> extends Abstr
     public void addToPlaylist(List<MRL> mediaLocators) {
         if (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport) {
             ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).addToPlaylist(mediaLocators);
+        }
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+    	if (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport) {
+            ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).insertIntoPlaylist(index, mediaURL);
+        }
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+    	if (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport) {
+            ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).insertIntoPlaylist(index, mediaURLs);
+        }
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+    	if (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport) {
+            ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).insertIntoPlaylist(index, mediaLocator);
+        }
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    	if (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport) {
+            ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).reorderPlaylist(from, to);
         }
     }
 

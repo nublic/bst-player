@@ -736,6 +736,44 @@ public class WinMediaPlayerX extends AbstractMediaPlayer implements PlaylistSupp
     public void addToPlaylist(String... mediaURLs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+    	if (playlist != null) {
+            playlist.insertItem(index, impl.createMedia(mediaURL));
+        } else {
+            urls.add(index, mediaURL);
+        }
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+    	throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+    	throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    	if (playlist != null) {
+            playlist.moveItem(from, to);
+        } else {
+        	if (from != to) {
+                // Save the element and remove it
+                String toMove = urls.get(from);
+                urls.remove(from);
+                // Put on its new place
+                if (from > to) { // The element was later in the list
+                	urls.add(to, toMove);
+                } else if (from < to) { // The element was before in the list
+                	urls.add(to - 1, toMove);
+                }
+            }
+        }
+    }
 
     @Override
     public void removeFromPlaylist(int index) {

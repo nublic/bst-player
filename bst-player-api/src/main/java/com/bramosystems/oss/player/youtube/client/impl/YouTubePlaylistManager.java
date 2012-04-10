@@ -107,6 +107,19 @@ public class YouTubePlaylistManager implements PlaylistSupport {
     }
     
     @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+        if (isYouTubeURL(mediaURL)) {  // URL is complete YouTube video URL
+            try {
+                videoIds.add(index, getVideoId(mediaURL));  // get videoId from URL
+            } catch (RegexException ex) {
+                callback.onError("URL not added to playlist - " + ex.getMessage());
+            }
+        } else {  // url assumed to be YouTube video Id ...
+            videoIds.add(index, mediaURL);
+        }
+    }
+    
+    @Override
     public void addToPlaylist(String... mediaURLs) {
         addToPlaylist(mediaURLs[0]);
     }
@@ -120,6 +133,31 @@ public class YouTubePlaylistManager implements PlaylistSupport {
     public void addToPlaylist(List<MRL> mediaLocators) {
         for (MRL mrl : mediaLocators) {
             addToPlaylist(mrl);
+        }
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+    	insertIntoPlaylist(index, mediaURLs[0]);
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+    	insertIntoPlaylist(index, mediaLocator.getNextResource(true));
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    	if (from != to) {
+            // Save the element and remove it
+            String toMove = videoIds.get(from);
+            videoIds.remove(from);
+            // Put on its new place
+            if (from > to) { // The element was later in the list
+            	videoIds.add(to, toMove);
+            } else if (from < to) { // The element was before in the list
+            	videoIds.add(to - 1, toMove);
+            }
         }
     }
     

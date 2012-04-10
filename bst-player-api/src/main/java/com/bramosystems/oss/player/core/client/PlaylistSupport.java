@@ -86,6 +86,38 @@ public interface PlaylistSupport {
      * @param index the index of the playlist entry.
      */
     public void removeFromPlaylist(int index);
+    
+    /**
+     * Inserts some media in the specified position.
+     * 
+     * @param index place to insert.
+     * @param mediaURLs the URL of the media.
+     */
+    public void insertIntoPlaylist(int index, String mediaURL);
+    
+    /**
+     * Inserts some media in the specified position.
+     * 
+     * @param index place to insert.
+     * @param mediaURL the alternative URLs of the same media (probably in different formats).
+     */
+    public void insertIntoPlaylist(int index, String... mediaURLs);
+    
+    /**
+     * Inserts some media in the specified position.
+     * 
+     * @param index place to insert.
+     * @param mediaLocator specifies alternative URLs of the same media.
+     */
+    public void insertIntoPlaylist(int index, MRL mediaLocator);
+    
+    /**
+     * Reorders things on a playlist
+     * 
+     * @param from place of the media to move
+     * @param to new place where the element is to be found
+     */
+    public void reorderPlaylist(int from, int to);
 
     /**
      * Removes all entries in the players' playlist

@@ -242,6 +242,34 @@ public abstract class CustomVideoPlayer extends AbstractMediaPlayer implements P
             ((PlaylistSupport) engine).addToPlaylist(mediaLocators);
         }
     }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+        if (engine instanceof PlaylistSupport) {
+            ((PlaylistSupport) engine).insertIntoPlaylist(index, mediaURL);
+        }
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+        if (engine instanceof PlaylistSupport) {
+            ((PlaylistSupport) engine).insertIntoPlaylist(index, mediaLocator);
+        }
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+        if (engine instanceof PlaylistSupport) {
+            ((PlaylistSupport) engine).insertIntoPlaylist(index, mediaURLs);
+        }
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    	if (engine instanceof PlaylistSupport) {
+            ((PlaylistSupport) engine).reorderPlaylist(from, to);
+        }
+    }
 
     @Override
     public boolean isShuffleEnabled() {

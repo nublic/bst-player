@@ -161,6 +161,38 @@ public class PlaylistManager implements PlaylistSupport {
         indexOracle.incrementIndexSize();
         _debug("Added to playlist - '" + mediaLocator + "'");
     }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+    	insertIntoPlaylist(index, new MRL(mediaURL));
+    }
+
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+    	insertIntoPlaylist(index, new MRL(mediaURLs));
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+        urls.add(index, mediaLocator);
+        indexOracle.incrementIndexSize();
+        _debug("Added to playlist - '" + mediaLocator + "'");
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    	if (from != to) {
+            // Save the element and remove it
+            MRL toMove = urls.get(from);
+            urls.remove(from);
+            // Put on its new place
+            if (from > to) { // The element was later in the list
+            	urls.add(to, toMove);
+            } else if (from < to) { // The element was before in the list
+            	urls.add(to - 1, toMove);
+            }
+        }
+    }
 
     @Override
     public void removeFromPlaylist(int index) {

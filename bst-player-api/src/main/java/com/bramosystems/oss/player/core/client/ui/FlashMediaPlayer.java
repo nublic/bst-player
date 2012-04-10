@@ -492,6 +492,15 @@ public class FlashMediaPlayer extends AbstractMediaPlayer implements PlaylistSup
             _playlistCache.add(mediaURL);
         }
     }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+    	if (isPlayerOnPage(playerId)) {
+    		impl.insertIntoPlaylist(index, mediaURL);
+        } else {
+        	_playlistCache.add(index, mediaURL);
+        }
+    }
 
     @Override
     public void addToPlaylist(MRL mediaLocator) {
@@ -507,6 +516,35 @@ public class FlashMediaPlayer extends AbstractMediaPlayer implements PlaylistSup
     public void addToPlaylist(List<MRL> mediaLocators) {
         for (MRL mrl : mediaLocators) {
             addToPlaylist(mrl);
+        }
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+    	insertIntoPlaylist(index, mediaURLs[0]);
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+    	insertIntoPlaylist(index, mediaLocator.getNextResource(true));
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    	if (isPlayerOnPage(playerId)) {
+    		impl.reorderPlaylist(from, to);
+        } else {
+        	if (from != to) {
+                // Save the element and remove it
+                String toMove = _playlistCache.get(from);
+                _playlistCache.remove(from);
+                // Put on its new place
+                if (from > to) { // The element was later in the list
+                	_playlistCache.add(to, toMove);
+                } else if (from < to) { // The element was before in the list
+                	_playlistCache.add(to - 1, toMove);
+                }
+            }
         }
     }
 

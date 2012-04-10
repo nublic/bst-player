@@ -456,6 +456,32 @@ public class VLCPlayer1 extends AbstractMediaPlayer implements PlaylistSupport {
             _playlistCache.add(new _MRL(mediaURL, null));
         }
     }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String mediaURL) {
+        if (isPlayerOnPage(playerId)) {
+//            stateHandler.addToPlaylist(mediaURL, null);
+        } else {
+            if (initListHandler == null) {
+                initListHandler = addPlayerStateHandler(new PlayerStateHandler() {
+
+                    @Override
+                    public void onPlayerStateChanged(PlayerStateEvent event) {
+                        switch (event.getPlayerState()) {
+                            case Ready:
+                                for (_MRL mrl : _playlistCache) {
+//                                    stateHandler.addToPlaylist(mrl.getUrl(), mrl.getOption());
+                                }
+                                break;
+                        }
+                        initListHandler.removeHandler();
+                    }
+                });
+            }
+            _playlistCache.add(index, new _MRL(mediaURL, null));
+        }
+    }
+    
     @Override
     public void addToPlaylist(MRL mediaLocator) {
     }
@@ -463,6 +489,19 @@ public class VLCPlayer1 extends AbstractMediaPlayer implements PlaylistSupport {
     @Override
     public void addToPlaylist(String... mediaURLs) {
     }
+    
+    @Override
+    public void insertIntoPlaylist(int index, MRL mediaLocator) {
+    }
+    
+    @Override
+    public void insertIntoPlaylist(int index, String... mediaURLs) {
+    }
+    
+    @Override
+    public void reorderPlaylist(int from, int to) {
+    }
+    
     @Override
     public boolean isShuffleEnabled() {
         checkAvailable();
