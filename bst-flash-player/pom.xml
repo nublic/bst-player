@@ -51,8 +51,8 @@
     </build>
         
     <properties>
-        <flex.version>4.5.0.20967</flex.version>
-        <flexmojo.version>4.0-RC2</flexmojo.version>
+        <flex.version>4.5.1.21328</flex.version>
+        <flexmojo.version>4.2-beta</flexmojo.version>
     </properties>
 
     <dependencies>
