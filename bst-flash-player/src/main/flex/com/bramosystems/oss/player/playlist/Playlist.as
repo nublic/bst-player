@@ -118,6 +118,36 @@ package com.bramosystems.oss.player.playlist {
              }
         }
         
+        public function insert(position:int, mediaUrl:String):void {
+            playlist.splice(position, 0, new PlaylistEntry(0, mediaUrl, mediaUrl));
+            dispatchEvent(new PlaylistEvent(PlaylistEvent.ADDED));
+            
+            /* NUBLIC SHUFFLING */
+            var newIndex:int;
+            if (shuffleOn) {
+                // Add after the element that is being played now
+                newIndex = generateRandomNumber(nublicShufflePosition + 1, nublicShuffleIndices.length);
+            } else {
+                // Add in any place
+                newIndex = generateRandomNumber(0, nublicShuffleIndices.length);
+            }
+            nublicShuffleIndices.splice(newIndex, 0, position);
+        }
+        
+        public function reorder(from:int, to:int): void {
+            if (from != to) {
+                // Save the element and remove it
+                var toMove: PlaylistEntry = playlist[from];
+                playlist.splice(from, 1);
+                // Put on its new place
+                if (from > to) { // The element was later in the list
+                    playlist.splice(to, 0, toMove);
+                } else if (from < to) { // The element was before in the list
+                    playlist.splice(to - 1, 0, toMove);
+                }
+            }
+        }
+        
         private function generateRandomNumber(min:int, max:int):int {
             return min + Math.round(Math.random() * (max - min));
         }

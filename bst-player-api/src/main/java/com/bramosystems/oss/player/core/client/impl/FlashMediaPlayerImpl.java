@@ -100,6 +100,14 @@ public class FlashMediaPlayerImpl extends JavaScriptObject {
     public native final void clearPlaylist() /*-{
     this.clearPlaylist();
     }-*/;
+    
+    public native final void insertIntoPlaylist(int index, String mediaURL) /*-{
+    this.insertIntoPlaylist(index, mediaURL);
+    }-*/;
+    
+    public native final void reorderPlaylist(int from, int to) /*-{
+    this.reorderPlaylist(from, to);
+    }-*/;
 
     public native final int getPlaylistCount() /*-{
     return this.getPlaylistSize();

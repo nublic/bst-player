@@ -109,6 +109,8 @@
                         ExternalInterface.addCallback("clearPlaylist", playlist.clear);
                         ExternalInterface.addCallback("removeFromPlaylist", playlist.remove);
                         ExternalInterface.addCallback("addToPlaylist", playlist.add);
+                        ExternalInterface.addCallback("insertIntoPlaylist", playlist.insert);
+                        ExternalInterface.addCallback("reorderPlaylist", playlist.reorder);
                         // repeat mode support ... [since 1.2]
                         ExternalInterface.addCallback("setRepeatMode", playlist.setRepeatMode);
                         ExternalInterface.addCallback("getRepeatMode", playlist.getRepeat);
