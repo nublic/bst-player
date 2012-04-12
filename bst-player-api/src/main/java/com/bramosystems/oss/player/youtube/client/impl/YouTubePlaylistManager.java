@@ -151,12 +151,11 @@ public class YouTubePlaylistManager implements PlaylistSupport {
     	if (from != to) {
             // Save the element and remove it
             String toMove = videoIds.get(from);
-            videoIds.remove(from);
-            // Put on its new place
+            videoIds.add(to, toMove);
             if (from > to) { // The element was later in the list
-            	videoIds.add(to, toMove);
+            	videoIds.remove(from + 1);
             } else if (from < to) { // The element was before in the list
-            	videoIds.add(to - 1, toMove);
+            	videoIds.remove(from);
             }
         }
     }

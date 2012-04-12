@@ -764,12 +764,11 @@ public class WinMediaPlayerX extends AbstractMediaPlayer implements PlaylistSupp
         	if (from != to) {
                 // Save the element and remove it
                 String toMove = urls.get(from);
-                urls.remove(from);
-                // Put on its new place
+                urls.add(to, toMove);
                 if (from > to) { // The element was later in the list
-                	urls.add(to, toMove);
+                	urls.remove(from + 1);
                 } else if (from < to) { // The element was before in the list
-                	urls.add(to - 1, toMove);
+                	urls.remove(from);
                 }
             }
         }

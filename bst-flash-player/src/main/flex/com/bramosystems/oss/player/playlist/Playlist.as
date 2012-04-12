@@ -138,12 +138,12 @@ package com.bramosystems.oss.player.playlist {
             if (from != to) {
                 // Save the element and remove it
                 var toMove: PlaylistEntry = playlist[from];
-                playlist.splice(from, 1);
+                playlist.splice(to, 0, toMove);
                 // Put on its new place
                 if (from > to) { // The element was later in the list
-                    playlist.splice(to, 0, toMove);
+                    playlist.splice(from + 1, 1);
                 } else if (from < to) { // The element was before in the list
-                    playlist.splice(to - 1, 0, toMove);
+                    playlist.splice(from, 1, toMove);
                 }
             }
         }

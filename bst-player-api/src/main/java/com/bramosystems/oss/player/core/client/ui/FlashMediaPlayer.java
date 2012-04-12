@@ -537,12 +537,11 @@ public class FlashMediaPlayer extends AbstractMediaPlayer implements PlaylistSup
         	if (from != to) {
                 // Save the element and remove it
                 String toMove = _playlistCache.get(from);
-                _playlistCache.remove(from);
-                // Put on its new place
+                _playlistCache.add(to, toMove);
                 if (from > to) { // The element was later in the list
-                	_playlistCache.add(to, toMove);
+                	_playlistCache.remove(from + 1);
                 } else if (from < to) { // The element was before in the list
-                	_playlistCache.add(to - 1, toMove);
+                	_playlistCache.remove(from);
                 }
             }
         }
