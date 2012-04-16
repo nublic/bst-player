@@ -136,13 +136,22 @@ package com.bramosystems.oss.player.playlist {
         
         public function reorder(from:int, to:int): void {
             if (from != to) {
+                // Update playing index
+                if (_index == from) {
+                    _index = to > from ? to - 1 : to;
+                } else (from > to && _index >= to && _index < from) {  // to, ..., from
+                    _index++;
+                } else (from < to && _index > from && _index < to) {  // from, ..., to
+                    _index--;
+                }
+                
                 // Save the element and remove it
                 var toMove: PlaylistEntry = playlist[from];
                 playlist.splice(to, 0, toMove);
                 // Put on its new place
-                if (from > to) { // The element was later in the list
+                if (from > to) { // to, ..., from
                     playlist.splice(from + 1, 1);
-                } else if (from < to) { // The element was before in the list
+                } else if (from < to) { // from, ..., to
                     playlist.splice(from, 1, toMove);
                 }
             }
