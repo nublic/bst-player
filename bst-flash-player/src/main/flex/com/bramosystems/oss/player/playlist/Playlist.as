@@ -193,24 +193,50 @@ package com.bramosystems.oss.player.playlist {
 
         /************************* EVENT HANDLERS ********************************/
         private function updateShuffle(event:SettingChangedEvent):void {
-            if (shuffleOn != Boolean(event.newValue)) {
-                shuffleOn = Boolean(event.newValue);
+            var newVal: Boolean = parseBoolean(event.newValue);
+            if (shuffleOn != newVal) {
+                shuffleOn = newVal;
                 
                 /* NUBLIC SHUFFLING */
-                nublicShuffleIndices = scramble(nublicShuffleIndices);
-                if (_index != -1) {
-                    var i:int = nublicShuffleIndices.indexOf(_index);
-                    if (i != -1) {
-                        nublicShuffleIndices.splice(i, 1);
-                        nublicShuffleIndices.splice(0, 0, _index);
+                if (shuffleOn) {
+                    nublicShuffleIndices = scramble(nublicShuffleIndices);
+                    if (_index != -1) {
+                        var i:int = nublicShuffleIndices.indexOf(_index);
+                        if (i != -1) {
+                            nublicShuffleIndices.splice(i, 1);
+                            nublicShuffleIndices.splice(0, 0, _index);
+                        }
+                        nublicShufflePosition = 0;
                     }
-                    nublicShufflePosition = 0;
                 }
             }
         }
 
         private function updateLoopCount(event:SettingChangedEvent):void {
             loopCount = parseInt(event.newValue);
+        }
+
+
+        static public function parseBoolean(str:String):Boolean
+        {
+            switch(str.toLowerCase())
+            {
+                // Check for true values
+                case "1":
+                case "true":
+                case "yes":
+                    return true;
+ 
+                // Check for false values
+                case "0":
+                case "false":
+                case "no":
+                    return false;
+                
+                // If all else fails cast string
+                default:
+                    return Boolean(str);
+            }
         }
 
         /************************* M3U PLAYLIST SUPPORT ****************************/
@@ -336,17 +362,20 @@ package com.bramosystems.oss.player.playlist {
                     nublicShufflePosition--;
                     if (nublicShufflePosition < 0) {
                         if (canRepeat) {
-                            nublicShufflePosition = size() -1;
+                            nublicShufflePosition = size() - 1;
                         } else {
                             nublicShufflePosition = -1;
                         }
                     }
                 }
+		
                 if (nublicShufflePosition >= size()) {
-                    _index = size();
+		    _nublicShufflePosition = size() - 1;
+		    _index = nublicShuffleIndices[nublicShufflePosition];
                     return true;
                 } else if (nublicShufflePosition < 0) {
-                    _index = -1;
+		    _nublicShufflePosition = 0;
+		    _index = nublicShuffleIndices[nublicShufflePosition];
                     return true;
                 } else {
                     _index = nublicShuffleIndices[nublicShufflePosition];
