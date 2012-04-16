@@ -139,9 +139,9 @@ package com.bramosystems.oss.player.playlist {
                 // Update playing index
                 if (_index == from) {
                     _index = to > from ? to - 1 : to;
-                } else (from > to && _index >= to && _index < from) {  // to, ..., from
+                } else if (from > to && _index >= to && _index < from) {  // to, ..., from
                     _index++;
-                } else (from < to && _index > from && _index < to) {  // from, ..., to
+                } else if (from < to && _index > from && _index < to) {  // from, ..., to
                     _index--;
                 }
                 
