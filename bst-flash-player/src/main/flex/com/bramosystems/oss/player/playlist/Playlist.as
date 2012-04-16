@@ -368,13 +368,13 @@ package com.bramosystems.oss.player.playlist {
                         }
                     }
                 }
-		
+                
                 if (nublicShufflePosition >= size()) {
-		    _nublicShufflePosition = size() - 1;
-		    _index = nublicShuffleIndices[nublicShufflePosition];
+                    nublicShufflePosition = size() - 1;
+                    _index = nublicShuffleIndices[nublicShufflePosition];
                     return true;
                 } else if (nublicShufflePosition < 0) {
-		    _nublicShufflePosition = 0;
+                    nublicShufflePosition = 0;
 		    _index = nublicShuffleIndices[nublicShufflePosition];
                     return true;
                 } else {
