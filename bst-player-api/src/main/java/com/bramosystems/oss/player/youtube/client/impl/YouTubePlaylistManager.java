@@ -179,4 +179,10 @@ public class YouTubePlaylistManager implements PlaylistSupport {
     public int getPlaylistSize() {
         return videoIds.size();
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+    	// This class is no longer used anywhere
+        return -1;
+    }
 }

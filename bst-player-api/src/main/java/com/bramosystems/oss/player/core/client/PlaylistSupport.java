@@ -156,4 +156,11 @@ public interface PlaylistSupport {
      * @return number of entries in the playlist
      */
     public int getPlaylistSize();
+    
+    /**
+     * Returns the current place in the playlist
+     * 
+     * @return current position in the playlist
+     */
+    public int getPlaylistIndex();
 }

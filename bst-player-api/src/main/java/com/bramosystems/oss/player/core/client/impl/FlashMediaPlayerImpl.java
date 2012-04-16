@@ -17,6 +17,8 @@ package com.bramosystems.oss.player.core.client.impl;
 
 import com.bramosystems.oss.player.core.client.RepeatMode;
 import com.bramosystems.oss.player.core.client.ui.FlashMediaPlayer;
+import com.bramosystems.oss.player.core.event.client.PlayStateEvent;
+import com.bramosystems.oss.player.core.event.client.PlayStateEvent.State;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /**
@@ -107,6 +109,29 @@ public class FlashMediaPlayerImpl extends JavaScriptObject {
     
     public native final void reorderPlaylist(int from, int to) /*-{
     this.reorderPlaylist(from, to);
+    }-*/;
+
+    public native final int getPlaylistIndex() /*-{
+    return this.getPlaylistIndex();
+    }-*/;
+
+    public final State getState() {
+    	switch (_getState()) {
+        case 2: // play started...
+        	return State.Started;
+        case 3: // play stopped...
+        	return State.Stopped;
+        case 4: // play paused...
+        	return State.Paused;
+        case 9: // play finished...
+            return State.Finished;
+        default:
+        	return null;
+    	}
+    }
+    
+    public native final int _getState() /*-{
+    this.getState();
     }-*/;
 
     public native final int getPlaylistCount() /*-{

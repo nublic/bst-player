@@ -114,6 +114,7 @@
                         // repeat mode support ... [since 1.2]
                         ExternalInterface.addCallback("setRepeatMode", playlist.setRepeatMode);
                         ExternalInterface.addCallback("getRepeatMode", playlist.getRepeat);
+                        ExternalInterface.addCallback("getPlaylistIndex", playlist.getIndex);
 
                         // play control stuffs...
                         ExternalInterface.addCallback("load", player.load);
@@ -125,6 +126,7 @@
                         ExternalInterface.addCallback("getDuration", player.getDuration);
                         ExternalInterface.addCallback("getPlayPosition", player.getPlayPosition);
                         ExternalInterface.addCallback("setPlayPosition", player.setPlayPosition);
+                        ExternalInterface.addCallback("getState", player.getState);
 
                         // matrix stuffs ... [since 1.1]
                         ExternalInterface.addCallback("getMatrix", player.getMatrix);

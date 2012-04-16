@@ -750,6 +750,12 @@ public class QuickTimePlayer extends AbstractMediaPlayer implements MatrixSuppor
         checkAvailable();
         return playlistManager.getPlaylistSize();
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+        checkAvailable();
+        return playlistManager.getPlaylistIndex();
+    }
 
     @Override
     public RepeatMode getRepeatMode() {

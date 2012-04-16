@@ -315,6 +315,14 @@ public abstract class CustomAudioPlayer extends AbstractMediaPlayer implements P
         }
         return 1;
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+        if (engine instanceof PlaylistSupport) {
+            return ((PlaylistSupport) engine).getPlaylistIndex();
+        }
+        return -1;
+    }
 
     @Override
     public void play(int index) throws IndexOutOfBoundsException {

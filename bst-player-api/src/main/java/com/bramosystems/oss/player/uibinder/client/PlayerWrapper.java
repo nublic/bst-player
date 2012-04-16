@@ -449,6 +449,14 @@ public abstract class PlayerWrapper<T extends AbstractMediaPlayer> extends Abstr
             ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).playPrevious();
         }
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+    	 if ((_engine != null) && (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport)) {
+             return ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).getPlaylistIndex();
+         }
+    	 return -1;
+    }
 
     @Override
     public void setMatrix(TransformationMatrix matrix) {

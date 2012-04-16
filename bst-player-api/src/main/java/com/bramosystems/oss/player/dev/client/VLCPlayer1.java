@@ -533,6 +533,12 @@ public class VLCPlayer1 extends AbstractMediaPlayer implements PlaylistSupport {
         checkAvailable();
         return impl.getPlaylistCount();
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+    	// Not implemented
+        return -1;
+    }
 
     /**
      * Sets the audio channel mode of the player

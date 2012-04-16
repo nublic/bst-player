@@ -728,6 +728,12 @@ public class DivXPlayer extends AbstractMediaPlayer implements PlaylistSupport {
         checkAvailable();
         return playlistManager.getPlaylistSize();
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+        checkAvailable();
+        return playlistManager.getPlaylistIndex();
+    }
 
     @Override
     public RepeatMode getRepeatMode() {

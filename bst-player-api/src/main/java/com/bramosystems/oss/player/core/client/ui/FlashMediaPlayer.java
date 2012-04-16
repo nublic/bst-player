@@ -627,6 +627,11 @@ public class FlashMediaPlayer extends AbstractMediaPlayer implements PlaylistSup
         checkAvailable();
         return impl.getVideoWidth();
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+    	return impl.getPlaylistIndex();
+    }
 
     @Override
     public void setResizeToVideoSize(boolean resize) {

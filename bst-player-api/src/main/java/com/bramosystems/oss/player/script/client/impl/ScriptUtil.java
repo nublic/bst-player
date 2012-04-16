@@ -523,6 +523,14 @@ public class ScriptUtil {
             }
             return 0;
         }
+        
+        @Override
+        public int getPlaylistIndex() {
+            if ((player != null) && (player instanceof PlaylistSupport)) {
+                return ((PlaylistSupport) player).getPlaylistIndex();
+            }
+            return -1;
+        }
 
         @Override
         public double getRate() {

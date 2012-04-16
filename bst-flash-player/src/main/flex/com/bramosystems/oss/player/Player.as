@@ -160,6 +160,10 @@ package com.bramosystems.oss.player {
             }
         }
 
+        public function getState():int {
+            return state;
+        }
+
         public function getDuration():Number {
             return player.getDuration();
         }

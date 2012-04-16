@@ -741,6 +741,12 @@ public class WinMediaPlayer extends AbstractMediaPlayer implements PlaylistSuppo
         checkAvailable();
         return playlistManager.getPlaylistSize();
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+        checkAvailable();
+        return playlistManager.getPlaylistIndex();
+    }
 
     @Override
     public RepeatMode getRepeatMode() {

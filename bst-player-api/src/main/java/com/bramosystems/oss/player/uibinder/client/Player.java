@@ -472,6 +472,17 @@ public class Player extends AbstractMediaPlayer
     }
     
     @Override
+    public int getPlaylistIndex() {
+        if (_engine == null) {
+            return -1;
+        }
+        if (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport) {
+            return ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).getPlaylistIndex();
+        }
+        return -1;
+    }
+    
+    @Override
     public void play(int index) throws IndexOutOfBoundsException {
         if ((_engine != null) && (_engine instanceof com.bramosystems.oss.player.core.client.PlaylistSupport)) {
             ((com.bramosystems.oss.player.core.client.PlaylistSupport) _engine).play(index);

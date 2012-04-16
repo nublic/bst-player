@@ -529,6 +529,12 @@ public class VLCPlayer extends AbstractMediaPlayer implements PlaylistSupport {
         checkAvailable();
         return stateHandler.getPlaylistManager().getPlaylistSize();
     }
+    
+    @Override
+    public int getPlaylistIndex() {
+        checkAvailable();
+        return stateHandler.getPlaylistManager().getPlaylistIndex();
+    }
 
     /**
      * Sets the audio channel mode of the player
