@@ -152,7 +152,7 @@ package com.bramosystems.oss.player.playlist {
                 if (from > to) { // to, ..., from
                     playlist.splice(from + 1, 1);
                 } else if (from < to) { // from, ..., to
-                    playlist.splice(from, 1, toMove);
+                    playlist.splice(from, 1);
                 }
             }
         }
