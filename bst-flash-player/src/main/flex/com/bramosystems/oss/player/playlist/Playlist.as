@@ -69,11 +69,15 @@ package com.bramosystems.oss.player.playlist {
             Log.info("'" + playlist.splice(index, 1) + "' removed from playlist!");
             dispatchEvent(new PlaylistEvent(PlaylistEvent.REMOVED));
             Log.info(playlist.length + " entries left in playlist");
+
+            if (_index >= index) { /* If playing something after the removed */
+                _index--;
+            }
             
             var greatest:int = playlist.length - 1;
             nublicShuffleIndices = nublicShuffleIndices.filter(
                 function (item:*, index:int, array:Array):Boolean { return item < greatest });
-            
+            nublicShufflePosition--;
         }
 
         public function getEntry(index:int):PlaylistEntry {
