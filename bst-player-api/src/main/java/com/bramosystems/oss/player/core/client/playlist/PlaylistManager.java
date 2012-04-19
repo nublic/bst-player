@@ -16,12 +16,13 @@
 package com.bramosystems.oss.player.core.client.playlist;
 
 import com.bramosystems.oss.player.core.client.*;
-import com.bramosystems.oss.player.core.client.impl.playlist.PlaylistIndexOracle;
 import com.bramosystems.oss.player.core.event.client.DebugEvent;
 import com.bramosystems.oss.player.core.event.client.PlayerStateEvent;
 import com.bramosystems.oss.player.core.event.client.PlayerStateHandler;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Provides playlist emulation support for media plugins
@@ -34,9 +35,13 @@ public class PlaylistManager implements PlaylistSupport {
     private Playlist urls;
     private ArrayList<String> msgCache;
     private PlayerCallback callback;
-    private PlaylistIndexOracle indexOracle;
-    private int pIndex;
     private boolean useCache;
+
+    private int _index;
+    private boolean shuffleOn;
+    private ArrayList<Integer> nublicShuffleIndices;
+    private int nublicShufflePosition;
+    private boolean repeat;
 
     /**
      * Creates the PlaylistManager object.
@@ -44,9 +49,14 @@ public class PlaylistManager implements PlaylistSupport {
     public PlaylistManager() {
         urls = new Playlist();
         msgCache = new ArrayList<String>();
-        indexOracle = new PlaylistIndexOracle();
-        useCache = true;
         callback = initCallback();
+        useCache = false;
+
+        _index = -1;
+        shuffleOn = false;
+        nublicShuffleIndices = new ArrayList<Integer>();
+        nublicShufflePosition = -1;
+        repeat = false;
     }
 
     /**
@@ -130,12 +140,34 @@ public class PlaylistManager implements PlaylistSupport {
 
     @Override
     public boolean isShuffleEnabled() {
-        return indexOracle.isRandomMode();
+        return this.shuffleOn;
     }
 
     @Override
     public void setShuffleEnabled(boolean enable) {
-        indexOracle.setRandomMode(enable);
+        if (enable != this.shuffleOn) {
+            this.shuffleOn = enable;
+
+            if (shuffleOn) {
+                Collections.shuffle(nublicShuffleIndices);
+                if (_index != -1) {
+                    int i = nublicShuffleIndices.indexOf(_index);
+                    if (i != -1) {
+                        nublicShuffleIndices.remove(i);
+                        nublicShuffleIndices.add(0, _index);
+                    }
+                    nublicShufflePosition = 0;                    
+                }
+            }
+        }
+    }
+
+    public boolean isRepeatEnabled() {
+        return this.repeat;
+    }
+
+    public void setRepeatEnabled(boolean repeat) {
+        this.repeat = repeat;
     }
 
     @Override
@@ -158,8 +190,17 @@ public class PlaylistManager implements PlaylistSupport {
     @Override
     public void addToPlaylist(MRL mediaLocator) {
         urls.add(mediaLocator);
-        indexOracle.incrementIndexSize();
         _debug("Added to playlist - '" + mediaLocator + "'");
+
+        // NUBLIC SHUFFLING
+        int newIndex;
+        Random r = new Random();
+        if (shuffleOn) {
+            newIndex = nublicShufflePosition + 1 + r.nextInt(nublicShuffleIndices.size() - nublicShufflePosition);
+        } else {
+            newIndex = r.nextInt(nublicShuffleIndices.size() + 1);
+        }
+        nublicShuffleIndices.add(newIndex, nublicShuffleIndices.size());
     }
     
     @Override
@@ -175,13 +216,30 @@ public class PlaylistManager implements PlaylistSupport {
     @Override
     public void insertIntoPlaylist(int index, MRL mediaLocator) {
         urls.add(index, mediaLocator);
-        indexOracle.incrementIndexSize();
         _debug("Added to playlist - '" + mediaLocator + "'");
+
+        // NUBLIC SHUFFLING
+        int newIndex;
+        Random r = new Random();
+        if (shuffleOn) {
+            newIndex = nublicShufflePosition + 1 + r.nextInt(nublicShuffleIndices.size() - nublicShufflePosition);
+        } else {
+            newIndex = r.nextInt(nublicShuffleIndices.size() + 1);
+        }
+        nublicShuffleIndices.add(newIndex, nublicShuffleIndices.size());
     }
     
     @Override
     public void reorderPlaylist(int from, int to) {
     	if (from != to) {
+            // Update playing index
+            if (_index == from) {
+                _index = to > from ? to - 1 : to;
+            } else if (from > to && _index >= to && _index < from) {  // to, ..., from
+                _index++;
+            } else if (from < to && _index > from && _index < to) {  // from, ..., to
+                _index--;
+            }
             // Save the element and remove it
             MRL toMove = urls.get(from);
             urls.add(to, toMove);
@@ -196,13 +254,29 @@ public class PlaylistManager implements PlaylistSupport {
     @Override
     public void removeFromPlaylist(int index) {
         _debug("Removed from playlist - '" + urls.remove(index) + "'");
-        indexOracle.removeFromCache(index);
+
+        if (_index >= index) {
+            _index--;
+        }
+
+        int greatest = urls.size() - 1;
+        ArrayList<Integer> newIndices = new ArrayList<Integer>();
+        for (int item : nublicShuffleIndices) {
+            if (item < greatest) {
+                newIndices.add(item);
+            }
+        }
+        nublicShuffleIndices = newIndices;
+        nublicShufflePosition--;
     }
 
     @Override
     public void clearPlaylist() {
         urls.clear();
-        indexOracle.reset(false);
+        _index = -1;
+
+        nublicShuffleIndices.clear();
+        nublicShufflePosition = -1;
     }
 
     @Override
@@ -222,12 +296,11 @@ public class PlaylistManager implements PlaylistSupport {
      * @throws PlayException if an end-of-playlist is reached.  Only thrown if {@code force} is false
      */
     public void playNext(boolean force) throws PlayException {
-        int ind = indexOracle.suggestIndex(true, force);
-        if (ind < 0) {
+        if (!computeIndex(true, force)) {
+            _playOrLoadMedia(_index, true);
+        } else {
             throw new PlayException("End of playlist");
         }
-        pIndex = ind;
-        _playOrLoadMedia(ind, true);
     }
 
     /**
@@ -237,18 +310,18 @@ public class PlaylistManager implements PlaylistSupport {
      * @throws PlayException if a start-of-playlist is reached.  Only thrown if {@code force} is false
      */
      public void playPrevious(boolean force) throws PlayException {
-        int ind = indexOracle.suggestIndex(false, force);
-        if (ind < 0) {
-            throw new PlayException("Beginning of playlist reached");
-        }
-        pIndex = ind;
-        _playOrLoadMedia(ind, true);
+         if (!computeIndex(true, force)) {
+             _playOrLoadMedia(_index, true);
+         } else {
+             throw new PlayException("End of playlist");
+         }
     }
 
     @Override
     public void play(int index) throws IndexOutOfBoundsException {
         try {
-            indexOracle.setCurrentIndex(index);
+            _index = index;
+            nublicShufflePosition = nublicShuffleIndices.indexOf(index);
             _playOrLoadMedia(index, true);
         } catch (PlayException ex) {
             _debug(ex.getMessage());
@@ -262,7 +335,7 @@ public class PlaylistManager implements PlaylistSupport {
      */
     public void loadAlternative() throws LoadException {
         try {
-            callback.load(urls.get(indexOracle.getCurrentIndex()).getNextResource(false));
+            callback.load(urls.get(_index).getNextResource(false));
         } catch (Exception e) {
             throw new LoadException(e.getMessage());
         }
@@ -275,7 +348,8 @@ public class PlaylistManager implements PlaylistSupport {
      */
     public void load(int index) {
         try {
-            indexOracle.setCurrentIndex(index);
+            _index = index;
+            nublicShufflePosition = nublicShuffleIndices.indexOf(index);
             _playOrLoadMedia(index, false);
         } catch (PlayException ex) {
             _debug(ex.getMessage());
@@ -286,12 +360,19 @@ public class PlaylistManager implements PlaylistSupport {
      * Load the next URL in the playlist
      */
     public void loadNext() {
-        pIndex = indexOracle.suggestIndex(true, true);
         try {
-            _playOrLoadMedia(pIndex, false);
+            if (!computeIndex(true, true)) {
+                _playOrLoadMedia(_index, false);
+            } else {
+                _debug("End of playlist");
+            }
         } catch (PlayException ex) {
             _debug(ex.getMessage());
         }
+    }
+
+    public String getItem(int index) {
+        return urls.get(index).getCurrentResource();
     }
 
     /**
@@ -314,8 +395,17 @@ public class PlaylistManager implements PlaylistSupport {
      * @return the current playlist index
      */
     public int getPlaylistIndex() {
-        int ind = indexOracle.getCurrentIndex();
-        return ind < 0 ? pIndex : ind;
+        return _index;
+    }
+
+    public void setPlaylistIndex(int index) {
+        this._index = index;
+
+        nublicShufflePosition = nublicShuffleIndices.indexOf(index);
+    }
+
+    public int getShuffleIndex() {
+        return this.nublicShufflePosition;
     }
 
     private void _playOrLoadMedia(int index, boolean play) throws PlayException {
@@ -330,6 +420,69 @@ public class PlaylistManager implements PlaylistSupport {
             msgCache.add(msg);
         } else {
             callback.onDebug(msg);
+        }
+    }
+
+    private boolean computeIndex(boolean up, boolean force) {
+        return _suggestIndex(up, repeat || force);
+    }
+
+    private boolean _suggestIndex(boolean up, boolean canRepeat) {
+        int size = urls.size();
+        if (!shuffleOn) {
+            if (_index < 0 && canRepeat) {  // prepare for another iteration ...
+                _index = up ? 0 : size;
+            } else {
+                _index = up ? ++_index : --_index;
+            }
+            
+            if (_index == size) {
+                _index = -1;
+            }
+            
+            if (_index < 0 && canRepeat) {  // prepare for another iteration ...
+                _index = up ? 0 : size;
+            }
+            
+            if (_index >= 0) { // keep the used index ...
+                return false; // valid index
+            }
+            
+            return true;  // end of list
+        } else {
+            if (up) {
+                nublicShufflePosition++;
+                if (nublicShufflePosition >= size) {
+                    if (canRepeat) {
+                        Collections.shuffle(nublicShuffleIndices);
+                        nublicShufflePosition = 0;
+                    } else {
+                        nublicShufflePosition = size;
+                    }
+                } 
+            } else {
+                nublicShufflePosition--;
+                if (nublicShufflePosition < 0) {
+                    if (canRepeat) {
+                        nublicShufflePosition = size - 1;
+                    } else {
+                        nublicShufflePosition = -1;
+                    }
+                }
+            }
+            
+            if (nublicShufflePosition >= size) {
+                nublicShufflePosition = size - 1;
+                _index = nublicShuffleIndices.get(nublicShufflePosition);
+                return true;
+            } else if (nublicShufflePosition < 0) {
+                nublicShufflePosition = 0;
+                _index = nublicShuffleIndices.get(nublicShufflePosition);
+                return true;
+            } else {
+                _index = nublicShuffleIndices.get(nublicShufflePosition);
+                return false;
+            }
         }
     }
     

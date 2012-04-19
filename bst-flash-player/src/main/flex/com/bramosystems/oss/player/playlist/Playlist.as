@@ -368,7 +368,7 @@ package com.bramosystems.oss.player.playlist {
                             nublicShuffleIndices = scramble(nublicShuffleIndices);
                             nublicShufflePosition = 0;
                         } else {
-                            nublicShufflePosition == size();
+                            nublicShufflePosition = size();
                         }
                     } 
                 } else {
