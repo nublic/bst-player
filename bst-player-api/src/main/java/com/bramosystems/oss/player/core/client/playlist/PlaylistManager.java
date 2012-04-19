@@ -19,8 +19,9 @@ import com.bramosystems.oss.player.core.client.*;
 import com.bramosystems.oss.player.core.event.client.DebugEvent;
 import com.bramosystems.oss.player.core.event.client.PlayerStateEvent;
 import com.bramosystems.oss.player.core.event.client.PlayerStateHandler;
+import com.google.common.collect.Collections2;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -137,6 +138,25 @@ public class PlaylistManager implements PlaylistSupport {
             msgCache = null;
         }
     }
+    
+    private <A> ArrayList<A> shuffle(Collection<A> c) {
+        Collection<List<A>> perms = Collections2.permutations(c);
+        Random r = new Random();
+        int n = r.nextInt(perms.size());
+        // Choose permutation
+        List<A> chosen_perm = null;
+        int i = 0;
+        for (List<A> perm : perms) {
+            if (i == n) {
+                chosen_perm = perm;
+                break;
+            }
+        }
+        // Save the permutation
+        ArrayList<A> perm_as_arraylist = new ArrayList();
+        perm_as_arraylist.addAll(chosen_perm);
+        return perm_as_arraylist;
+    }
 
     @Override
     public boolean isShuffleEnabled() {
@@ -149,7 +169,7 @@ public class PlaylistManager implements PlaylistSupport {
             this.shuffleOn = enable;
 
             if (shuffleOn) {
-                Collections.shuffle(nublicShuffleIndices);
+                nublicShuffleIndices = shuffle(nublicShuffleIndices);
                 if (_index != -1) {
                     int i = nublicShuffleIndices.indexOf(_index);
                     if (i != -1) {
@@ -454,7 +474,7 @@ public class PlaylistManager implements PlaylistSupport {
                 nublicShufflePosition++;
                 if (nublicShufflePosition >= size) {
                     if (canRepeat) {
-                        Collections.shuffle(nublicShuffleIndices);
+                        nublicShuffleIndices = shuffle(nublicShuffleIndices);
                         nublicShufflePosition = 0;
                     } else {
                         nublicShufflePosition = size;
