@@ -100,9 +100,10 @@
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-    		<groupId>com.google.guava</groupId>
-			<artifactId>guava-gwt</artifactId>
-		</dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava-gwt</artifactId>
+                <version>11.0.2</version>
+        </dependency>
         <!--
         TODO: defer implementation till 2.x
         <dependency>
