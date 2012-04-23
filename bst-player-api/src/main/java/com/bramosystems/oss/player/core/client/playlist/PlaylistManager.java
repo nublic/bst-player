@@ -139,8 +139,8 @@ public class PlaylistManager implements PlaylistSupport {
         }
     }
     
-    private <A> ArrayList<A> shuffle(Collection<A> c) {
-        /*Collection<List<A>> perms = Collections2.permutations(c);
+/*    private <A> ArrayList<A> shuffle(Collection<A> c) {
+        Collection<List<A>> perms = Collections2.permutations(c);
         Random r = new Random();
         int n = r.nextInt(perms.size());
         // Choose permutation
@@ -151,13 +151,13 @@ public class PlaylistManager implements PlaylistSupport {
                 chosen_perm = perm;
                 break;
             }
-        }*/
+        }
         // Save the permutation
         ArrayList<A> perm_as_arraylist = new ArrayList();
         perm_as_arraylist.addAll(chosen_perm);
         return perm_as_arraylist;
     }
-
+*/
     @Override
     public boolean isShuffleEnabled() {
         return this.shuffleOn;
@@ -169,7 +169,7 @@ public class PlaylistManager implements PlaylistSupport {
             this.shuffleOn = enable;
 
             if (shuffleOn) {
-                nublicShuffleIndices = shuffle(nublicShuffleIndices);
+                //nublicShuffleIndices = shuffle(nublicShuffleIndices);
                 if (_index != -1) {
                     int i = nublicShuffleIndices.indexOf(_index);
                     if (i != -1) {
