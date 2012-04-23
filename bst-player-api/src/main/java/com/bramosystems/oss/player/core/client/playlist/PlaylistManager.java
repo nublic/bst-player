@@ -140,7 +140,7 @@ public class PlaylistManager implements PlaylistSupport {
     }
     
     private <A> ArrayList<A> shuffle(Collection<A> c) {
-        Collection<List<A>> perms = Collections2.permutations(c);
+        /*Collection<List<A>> perms = Collections2.permutations(c);
         Random r = new Random();
         int n = r.nextInt(perms.size());
         // Choose permutation
@@ -151,7 +151,7 @@ public class PlaylistManager implements PlaylistSupport {
                 chosen_perm = perm;
                 break;
             }
-        }
+        }*/
         // Save the permutation
         ArrayList<A> perm_as_arraylist = new ArrayList();
         perm_as_arraylist.addAll(chosen_perm);
