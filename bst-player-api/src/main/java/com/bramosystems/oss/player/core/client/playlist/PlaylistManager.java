@@ -335,6 +335,17 @@ public class PlaylistManager implements PlaylistSupport {
     @Override
     public void play(int index) throws IndexOutOfBoundsException {
         try {
+            if (shuffleOn) {
+                nublicShuffleIndices = shuffle(nublicShuffleIndices);
+                if (index != -1) {
+                    int i = nublicShuffleIndices.indexOf(index);
+                    if (i != -1) {
+                        nublicShuffleIndices.remove(i);
+                        nublicShuffleIndices.add(0, index);
+                    }
+                    nublicShufflePosition = 0;                    
+                }
+            }
             _index = index;
             nublicShufflePosition = nublicShuffleIndices.indexOf(index);
             _playOrLoadMedia(index, true);
