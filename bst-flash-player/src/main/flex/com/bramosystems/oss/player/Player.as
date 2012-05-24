@@ -93,6 +93,8 @@ package com.bramosystems.oss.player {
         public function play():void {
             switch(state) {
                 case LOADED:
+                    playNext();
+                    break;
                 case PAUSED:
                 case STOPPED:
                     player.play();
@@ -142,6 +144,10 @@ package com.bramosystems.oss.player {
         public function playIndex(index:int):Boolean {
             var url:String = playlist.getEntry(index).getFileName();
             if(url != null) {
+                if (playlist.isShuffleOn()) {
+                    playlist.shufflePuttingFirst(index);
+                    
+                } 
                 playlist.setIndex(index);
                 _load(url);
                 player.play();

@@ -51,6 +51,10 @@ package com.bramosystems.oss.player.playlist {
             nublicShufflePosition = -1;
         }
 
+        public function isShuffleOn():Boolean {
+            return shuffleOn;
+        }
+
         public function size():uint {
             return playlist.length;
         }
@@ -159,6 +163,16 @@ package com.bramosystems.oss.player.playlist {
                     playlist.splice(from, 1);
                 }
             }
+        }
+
+        public function shufflePuttingFirst(n: int):void {
+           scramble(nublicShuffleIndices)
+           // Now put the n first
+           var i:int = nublicShuffleIndices.indexOf(n);
+           if (i != -1) {
+               nublicShuffleIndices.splice(i, 1);
+               nublicShuffleIndices.splice(0, 0, n);
+           }
         }
         
         private function generateRandomNumber(min:int, max:int):int {
